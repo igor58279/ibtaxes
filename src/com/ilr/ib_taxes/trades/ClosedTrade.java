@@ -1,10 +1,12 @@
 package com.ilr.ib_taxes.trades;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ClosedTrade extends Trade {
 
-	
+	private static final String DATE_FORMAT = "dd/MM/yyyy";
 	
 	public ClosedTrade(String ticketName, float quantity, float dealPrice, float exchRate, boolean bBuySell,
 			float fCommission, Date dealDate, Date settleDate, String activeClass, String activeCurrency,
@@ -92,14 +94,36 @@ public class ClosedTrade extends Trade {
 	
 	public float getClosingAmount() {
 		
-		return closingAction?getQuantity()  * closingPrice : -1 * getQuantity()  * closingPrice;
+		float closingAmount = 1;
+		
+		if(getActiveClass().equals("OPT"))
+			closingAmount = 100;
+		if(!closingAction)
+			closingAmount *= -1;
+			
+		return closingAmount * getQuantity()  * closingPrice ;
 	}
 	public float getClosingAmountCur2() {
-		return closingAction? getQuantity()  * closingPrice * closingRate: -1 * getQuantity()  * closingPrice * closingRate;
+		float closingAmount = 1;
+		
+		if(getActiveClass().equals("OPT"))
+			closingAmount = 100;
+		if(!closingAction)
+			closingAmount *= -1;
+		return closingAmount*  getQuantity()  * closingPrice * closingRate;
 	}
 	public void printClosedDeal() {
-		String closedDeal = getTicketName() + "," + getQuantity() + ", " + (isbBuySell()?"BUY":"SELL") +"," + "DATE1" + "," + getExchRate() + "," + getCommission()
-					    + (isbBuySell()?"SELL":"BUY")+ "," + "DATE2" + ",closing price="+ closingPrice +",closingRate=" + closingRate + "," + closingCommission 
+		String date1, date2;
+		
+		
+		DateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
+		
+
+		date1 = formatter.format(this.getDealDate());
+		date2 = formatter.format(this.closingDealDate);
+		
+		String closedDeal = getTicketName() + "," + getQuantity() + ", " + (isbBuySell()?"BUY":"SELL") +" date=" + date1 + "," + getExchRate() + "," + getCommission()
+		+ ", "+ (isbBuySell()?"SELL":"BUY")+ " date=" + date2 + ",closing price="+ closingPrice +",closingRate=" + closingRate + "," + closingCommission 
 					    + ", resultUsd="+ dealResultUsd +",closing result=" + dealResult;
 		System.out.println( closedDeal);
 	}

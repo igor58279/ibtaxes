@@ -109,10 +109,27 @@ public class Trade implements Comparable<Trade>{
 	    return getDealDate().compareTo(t.getDealDate());
 	  }
 	public float getAmount() {
-		return bBuySell? quantity *dealPrice : -1 * quantity *dealPrice;
+		
+		float k = 1;
+		
+		if(activeClass.equals("OPT"))
+			k = 100;
+		if(!bBuySell)
+			k *= -1;
+			
+		return k * quantity *dealPrice ;
 	}
 	public float getAmountCur2() {
-		return bBuySell? quantity *dealPrice * exchRate: -1 * quantity *dealPrice * exchRate;
+		
+		float k = 1;
+		
+		if(activeClass.equals("OPT"))
+			k = 100;
+		if(!bBuySell)
+			k *= -1;
+			
+		return k * quantity *dealPrice * exchRate;
+		
 	}
 	
 	public boolean adjustQuantity(float reduce) {

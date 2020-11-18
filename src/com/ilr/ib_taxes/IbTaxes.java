@@ -64,13 +64,13 @@ public class IbTaxes {
 		}
 		trades.printMap();
 		
-		trades.printTax("GILD");
-		trades.printTax("RDS A");
-		trades.printTax("GILD");
-		trades.printTax("fff");
-		trades.printTax("KSS");
-		trades.printTax("XEC");
-		trades.printTax("CMA");
+//		trades.printTax("GILD");
+//		trades.printTax("RDS A");
+//		trades.printTax("GILD");
+		trades.printTax("AAL   210115C00030000");
+//		trades.printTax("KSS");
+//		trades.printTax("XEC");
+//		trades.printTax("CMA");
 	}
 
 }
