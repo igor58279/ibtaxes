@@ -142,4 +142,7 @@ public class Trade implements Comparable<Trade>{
 		return quantity == 0? true:false;
 		
 	}
+	public String getActiveClassName() {
+		return getActiveClass().equals("STK")?"Акция":"Опцион";
+	}
 }

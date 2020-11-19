@@ -7,6 +7,7 @@ import java.util.Date;
 public class ClosedTrade extends Trade {
 
 	private static final String DATE_FORMAT = "dd/MM/yyyy";
+	private static final float TAX_RATE = 0.13f;
 	
 	public ClosedTrade(String ticketName, float quantity, float dealPrice, float exchRate, boolean bBuySell,
 			float fCommission, Date dealDate, Date settleDate, String activeClass, String activeCurrency,
@@ -72,15 +73,21 @@ public class ClosedTrade extends Trade {
 	
 	private float dealResultUsd;
 	private float dealResult;
+	private float m_tax = 0;
 	
 	public void calculateResult()
 	{
 		dealResultUsd = -1 *(getClosingAmount() + getAmount()) + closingCommission + getCommission();
 		dealResult = -1 *( getClosingAmountCur2() + getAmountCur2())+ closingCommission*closingRate + getCommission()*getExchRate();
-
+		
+		m_tax = dealResult * TAX_RATE;
+	
 	}
 	public float getDealResultUsd() {
 		return dealResultUsd;
+	}
+	public float getTax() {
+		return m_tax;
 	}
 	public void setDealResultUsd(float dealResultUsd) {
 		this.dealResultUsd = dealResultUsd;
@@ -122,10 +129,47 @@ public class ClosedTrade extends Trade {
 		date1 = formatter.format(this.getDealDate());
 		date2 = formatter.format(this.closingDealDate);
 		
-		String closedDeal = getTicketName() + "," + getQuantity() + ", " + (isbBuySell()?"BUY":"SELL") +" date=" + date1 + "," + getExchRate() + "," + getCommission()
-		+ ", "+ (isbBuySell()?"SELL":"BUY")+ " date=" + date2 + ",closing price="+ closingPrice +",closingRate=" + closingRate + "," + closingCommission 
-					    + ", resultUsd="+ dealResultUsd +",closing result=" + dealResult;
+		String closedDeal = getActiveClassName()+  ","
+		                   + getActiveCurrency() + "," + getExchRate()+ ","
+		                   + getTicketName() + ","+ date1 + ","+ getQuantity()+ ","
+		                   + getDealPrice() + "," + getDealPrice()* getExchRate()+ ","
+		                   + getCommission() + "," + getCommission()* getExchRate()+ ","
+		                   + getQuantity()* getDealPrice()+ ","
+		                   + getQuantity()* getDealPrice() * getExchRate()
+		                   + "\r\n ,," + getClosingRate()+",,"
+		                   + date2 +"," + -1 * getQuantity() +","
+		                   + getClosingPrice()+ "," + getClosingPrice()* getClosingRate()+","
+		                   + getClosingCommission() +"," + getClosingCommission()* getClosingRate()+","
+		                   + -1 * getQuantity()* getClosingPrice()+ ","
+		                   + -1 * getQuantity()* getClosingPrice() * getClosingRate() + ","
+		                   + getDealResultUsd() + "," + getDealResult()+ ","
+		                   + getTax();
 		System.out.println( closedDeal);
+		                   
+		                   
+				
+				
+//				getTicketName() + "," + getQuantity() + ", " + (isbBuySell()?"BUY":"SELL") +" date=" + date1 + "," + getExchRate() + "," + getCommission()
+//		+ ", "+ (isbBuySell()?"SELL":"BUY")+ " date=" + date2 + ",closing price="+ closingPrice +",closingRate=" + closingRate + "," + closingCommission 
+//					    + ", resultUsd="+ dealResultUsd +",closing result=" + dealResult;
+//		System.out.println( closedDeal);
 	}
 		
+//	public void printClosedDeal() {
+//		String date1, date2;
+//		
+//		
+//		DateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
+//		
+//
+//		date1 = formatter.format(this.getDealDate());
+//		date2 = formatter.format(this.closingDealDate);
+//		
+//		String closedDeal = getTicketName() + "," + getQuantity() + ", " + (isbBuySell()?"BUY":"SELL") +" date=" + date1 + "," + getExchRate() + "," + getCommission()
+//		+ ", "+ (isbBuySell()?"SELL":"BUY")+ " date=" + date2 + ",closing price="+ closingPrice +",closingRate=" + closingRate + "," + closingCommission 
+//					    + ", resultUsd="+ dealResultUsd +",closing result=" + dealResult;
+//		System.out.println( closedDeal);
+//	}
+	
+	
 }

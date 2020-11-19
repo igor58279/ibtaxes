@@ -40,7 +40,7 @@ public class TaxStatement {
 			System.out.println("----------------CLOSED-----------------------");
 						
 			for(int i =0; i<m_lstClosed.size();i++) {
-		    	System.out.println(m_lstClosed.get(i));
+		    	//System.out.println(m_lstClosed.get(i));
 		    	m_lstClosed.get(i).printClosedDeal();
 			}
 			System.out.println("---------------------------------------");
