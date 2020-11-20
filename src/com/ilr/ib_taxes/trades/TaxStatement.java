@@ -54,7 +54,7 @@ public class TaxStatement {
 				float fReduce = Math.min (Math.abs(m_lstTrade.get(0).getQuantity()),Math.abs(m_lstTrade.get(i).getQuantity()));
 			
 			    ClosedTrade closedTrade = new ClosedTrade (m_lstTrade.get(0).getTicketName(),
-			    		fReduce,
+			    		m_lstTrade.get(0).isbBuySell()?fReduce: -1 * fReduce,
 			    		m_lstTrade.get(0).getDealPrice(),
 			    		m_lstTrade.get(0).getExchRate(),
 			    		m_lstTrade.get(0).isbBuySell(),
@@ -85,7 +85,7 @@ public class TaxStatement {
 			    if(b1)
 			    	m_lstTrade.remove(0);
 			    
-			    bClosedTrade = true;			    
+			    return true;			    
 			}
 		}
 		return bClosedTrade;

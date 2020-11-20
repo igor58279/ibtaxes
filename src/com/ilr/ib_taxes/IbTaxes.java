@@ -64,7 +64,7 @@ public class IbTaxes {
 		}
 		trades.printMap();
 		
-		
+//		trades.printTickerTaxes("/Users/igor/Brokerage/IB/taxes_test.csv","PACW") ;
 		
 		trades.printAllTaxes("/Users/igor/Brokerage/IB/taxes.csv");
 		trades.printActive("/Users/igor/Brokerage/IB/open.csv");

@@ -35,6 +35,7 @@ public class Trade implements Comparable<Trade>{
 	private Date settleDate;
 	private String activeClass;
 	private String activeCurrency;
+	private String m_action;
 	
 	DateFormat m_formatter = new SimpleDateFormat(DATE_FORMAT);
 	
@@ -68,6 +69,12 @@ public class Trade implements Comparable<Trade>{
 		this.dealPrice = dealPrice;
 		this.exchRate = exchRate;
 		this.bBuySell = bBuySell;
+		if(bBuySell)
+			m_action = "Покупка";
+		else
+			m_action = "Продажа";
+		
+			
 		this.fCommission = fCommission;
 		this.dealDate = dealDate;
 		this.settleDate = settleDate;
@@ -79,6 +86,14 @@ public class Trade implements Comparable<Trade>{
 	    
    		
 	}
+	public String getAction() {
+		return m_action;
+	}
+
+	public void setAction(String action) {
+		this.m_action = action;
+	}
+
 	private void setLocaleDecimalSeparator() {
 		m_locale =new Locale("ru", "RU");
 		m_nf = NumberFormat.getNumberInstance(m_locale);
@@ -90,6 +105,10 @@ public class Trade implements Comparable<Trade>{
 	}
 	public void setbBuySell(boolean bBuySell) {
 		this.bBuySell = bBuySell;
+		if(bBuySell)
+			m_action = "Покупка";
+		else
+			m_action = "Продажа";
 	}
 	public float getCommission() {
 		return fCommission;
@@ -135,7 +154,8 @@ public class Trade implements Comparable<Trade>{
 		date = formatter.format(this.getDealDate());
 		String activeTradeString =  getActiveClassName()+  ";"
 			                   + getActiveCurrency() + ";" + getLocaleNubmer(getExchRate())+ ";"
-			                   + getTicketName() + ";"+ date + ";"+ getLocaleNubmer(getQuantity())+ ";"
+			                   + getTicketName() + ";"+ date + ";" + getAction() + ";"
+			                   + getLocaleNubmer(getQuantity())+ ";"
 			                   + getLocaleNubmer(getDealPrice()) + ";"
 			                   + getLocaleNubmer(getDealPrice()* getExchRate())+ ";"
 			                   + getLocaleNubmer(getCommission()) + ";" + getLocaleNubmer(getCommission()* getExchRate())+ ";"

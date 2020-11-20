@@ -13,7 +13,7 @@ import java.util.Map;
 public class Trades {
 	
 	//Read parameters from configuration
-	private static final String[] HEADER_LINES = {"Период;01/01/20;12/31/20\n",		
+	private static final String[] HEADER_LINES = {"\n\n","Период;01/01/20;12/31/20\n",		
 	"Имя брокера;Interactive Brokers;Адрес брокера;Two Pickwick Plaza,Greenwich,CT 06830\n",	
 	"Имя;Ройтман;Игорь;Львович\n"	,
 	"Имя(английский);Roitman;Igor\n",		
@@ -21,7 +21,7 @@ public class Trades {
 	"Базовая валюта;USD\n",		
 	"Тип счета;Индивидуальный\n",	
 	"Возможности счета;Маржа","\n\n",
-	"Класс актива;Валюта;Курс рубля ЦБ РФ;Символ;Дата Открытия/Закрытия;Количество;Цена за единицу USD;Цена за единицу РУБ;Комиссия USD;Комиссия РУБ;Стоимость покупки/продажи USD;Стоимость покупки/продажи РУБ;Прибыль/Убыток USD;Прибыль/Убыток РУБ;Налог к уплате/вычету 13%\n"};		
+	"Класс актива;Валюта;Курс рубля ЦБ РФ;Символ;Дата Открытия/Закрытия;Вид сделки;Количество;Цена за единицу USD;Цена за единицу РУБ;Комиссия USD;Комиссия РУБ;Стоимость покупки/продажи USD;Стоимость покупки/продажи РУБ;Прибыль/Убыток USD;Прибыль/Убыток РУБ;Налог к уплате/вычету 13%\n"};		
 	
 	
 	
@@ -94,6 +94,27 @@ public class Trades {
 	        System.err.format("IOException: %s%n", e);
 	    }
 	}
+	
+	public void printTickerTaxes(String fileName,String ticker) {	
+		try (FileWriter writer = new FileWriter(fileName);
+			BufferedWriter bw = new BufferedWriter(writer)) {
+			printHeader(bw);
+			
+			ArrayList<String> taxStrList;
+			taxStrList = getTaxLines(ticker);
+			
+			
+			if(taxStrList != null) {
+				for(int i =0; i<taxStrList.size();i++) {
+					bw.write(taxStrList.get(i));
+			    }
+			}
+		
+		}catch (IOException e) {
+	        System.err.format("IOException: %s%n", e);
+	    }
+	}
+	
 	//prints into the file all remaining active(open) trades
 	//from m_activeTrades
 	public void printActive(String fileName) {

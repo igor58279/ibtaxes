@@ -22,6 +22,12 @@ public class ClosedTrade extends Trade {
 		this.closingDealDate = closingDealDate;
 		this.closingSettleDate = closingSettleDate;
 		
+		if(closingAction)
+			m_closingAction = "Покупка";
+		else
+			m_closingAction = "Продажа";
+
+		
 		calculateResult();
 	}
 
@@ -66,6 +72,7 @@ public class ClosedTrade extends Trade {
 	private float closingRate;
 	
 	private boolean closingAction;
+	private String m_closingAction;
 	private float  closingCommission;
 	private Date closingDealDate;
 	private Date closingSettleDate;
@@ -127,20 +134,22 @@ public class ClosedTrade extends Trade {
 		date1 = formatter.format(this.getDealDate());
 		date2 = formatter.format(this.closingDealDate);
 		
+		
 		String closedDealStr = getActiveClassName()+  ";"
 		                   + getActiveCurrency() + ";" + getLocaleNubmer(getExchRate()) + ";"
-		                   + getTicketName() + ";"+ date1 + ";"+ getLocaleNubmer(getQuantity()) + ";"
+		                   + getTicketName() + ";"+ date1 + ";" + getAction() + ";"
+		                   + getLocaleNubmer(getQuantity()) + ";"
 		                   + getLocaleNubmer(getDealPrice()) + ";" + getLocaleNubmer(getDealPrice()* getExchRate()) + ";"
 		                   + getLocaleNubmer(getCommission()) + ";" + getLocaleNubmer(getCommission()* getExchRate()) + ";"
-		                   + getLocaleNubmer(getQuantity()* getDealPrice())+ ";"
-		                   + getLocaleNubmer(getQuantity()* getDealPrice() * getExchRate())
+		                   + getLocaleNubmer(getAmount())+ ";"
+		                   + getLocaleNubmer(this.getAmountCur2())
 		                   + "\n ;;" + getLocaleNubmer(getClosingRate())+";;"
-		                   + date2 +";" + getLocaleNubmer(-1 * getQuantity()) +";"
+		                   + date2 +";" + m_closingAction+ ";" + getLocaleNubmer(-1 * getQuantity()) +";"
 		                   + getLocaleNubmer(getClosingPrice()) + ";" + getLocaleNubmer(getClosingPrice()* getClosingRate()) + ";"
 		                   + getLocaleNubmer(getClosingCommission()) + ";" 
-		                   + getLocaleNubmer(getClosingCommission()* getClosingRate())+";"
-		                   + getLocaleNubmer(-1 * getQuantity()* getClosingPrice()) + ";"
-		                   + getLocaleNubmer(-1 * getQuantity()* getClosingPrice() * getClosingRate()) + ";"
+		                   + getLocaleNubmer(getClosingCommission()* getClosingRate())+";"  
+		                   + getLocaleNubmer(getClosingAmount()) + ";"
+		                   + getLocaleNubmer(getClosingAmountCur2()) + ";"
 		                   + getLocaleNubmer(getDealResultUsd()) + ";" + getLocaleNubmer(getDealResult())+ ";"
 		                   + getLocaleNubmer(getTax()) + "\n";
 		return closedDealStr;
