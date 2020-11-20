@@ -12,15 +12,25 @@ import java.util.List;
 import com.ilr.ib_taxes.trades.Trade;
 
 public class Utils {
-	
+	private static final int TICKET_NAME = 5;
+	private static final int CURRENCY = 3;
+	private static final int ACTION = 40;
+	private static final int QUANTITY = 41;
+	private static final int DEAL_PRICE = 42;
+	private static final int DEAL_COMISSION = 45;
+	private static final int ACTIVE_CLASS = 4;
+	private static final int DEAL_DATE = 38;
+	private static final int SETTLE_DATE = 37;
+	private static final String IB_DATE = "yyyy-MM-dd";
+	private static final String CB_DATE = "MM/dd/yy";
 	
 	SimpleDateFormat formatter, exchFormatter;  
 	
 	
 	public Utils() {
 		super();
-		formatter = new SimpleDateFormat("yyyy-MM-dd") ;
-		exchFormatter = new SimpleDateFormat("MM/dd/yy") ;
+		formatter = new SimpleDateFormat(IB_DATE) ;
+		exchFormatter = new SimpleDateFormat(CB_DATE) ;
 
 		
 		
@@ -53,25 +63,25 @@ public class Utils {
 			Trade trade = new Trade();
 			String tmpStr;
 			try {
-				trade.setTicketName(stripQuotes(line[5]));
+				trade.setTicketName(stripQuotes(line[TICKET_NAME]));
 				//should be USD
-				trade.setActiveCurrency(stripQuotes(line[3]));
+				trade.setActiveCurrency(stripQuotes(line[CURRENCY]));
 				
 				// Buy = 40
-				trade.setbBuySell(stripQuotes(line[40]).matches("BUY")? true: false);
+				trade.setbBuySell(stripQuotes(line[ACTION]).matches("BUY")? true: false);
 				
-				trade.setQuantity(Float.parseFloat(stripQuotes(line[41])));
+				trade.setQuantity(Float.parseFloat(stripQuotes(line[QUANTITY])));
 				
-				trade.setDealPrice(Float.parseFloat(stripQuotes(line[42])));
+				trade.setDealPrice(Float.parseFloat(stripQuotes(line[DEAL_PRICE])));
 				
-				trade.setCommission(Float.parseFloat(stripQuotes(line[45])));
+				trade.setCommission(Float.parseFloat(stripQuotes(line[DEAL_COMISSION])));
 				
-				trade.setActiveClass(stripQuotes(line[4]));
+				trade.setActiveClass(stripQuotes(line[ACTIVE_CLASS]));
 				
-				Date dealDate=formatter.parse(stripQuotes(line[38]));
+				Date dealDate=formatter.parse(stripQuotes(line[DEAL_DATE]));
 				trade.setDealDate(dealDate);
 				
-				tmpStr = stripQuotes(line[37]);
+				tmpStr = stripQuotes(line[SETTLE_DATE]);
 				if(tmpStr == null) {
 					trade.setSettleDate(dealDate);
 				}

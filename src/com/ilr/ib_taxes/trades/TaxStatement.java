@@ -27,23 +27,18 @@ public class TaxStatement {
 			
 		//we have to lists  - open positions and closed ones
 		// just print for debugging purposes
-		System.out.println("----------------TAX STATEMENT-----------------------");
-		
-		System.out.println("----------------STILL OPEN-----------------------");
-		
 		for(int i =0; i<m_lstTrade.size();i++) {
 	    	System.out.println(m_lstTrade.get(i));
 	    }
 		
-		System.out.println("---------------------------------------");
+		
 		if(m_lstClosed !=null) {
-			System.out.println("----------------CLOSED-----------------------");
+			
 						
 			for(int i =0; i<m_lstClosed.size();i++) {
-		    	//System.out.println(m_lstClosed.get(i));
 		    	m_lstClosed.get(i).printClosedDeal();
 			}
-			System.out.println("---------------------------------------");
+			
 
 		}
 		
