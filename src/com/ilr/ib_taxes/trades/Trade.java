@@ -1,8 +1,11 @@
 package com.ilr.ib_taxes.trades;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Trade implements Comparable<Trade>{
 	private static final String DATE_FORMAT = "dd/MM/yyyy";
@@ -12,9 +15,17 @@ public class Trade implements Comparable<Trade>{
 	private float quantity;
 	private float dealPrice;
 	private float exchRate;
+	
+	Locale m_locale; 
+	NumberFormat m_nf;
+	DecimalFormat m_df;
+
+	
+	
 	public float getExchRate() {
 		return exchRate;
 	}
+	
 	public void setExchRate(float exchRate) {
 		this.exchRate = exchRate;
 	}
@@ -63,9 +74,19 @@ public class Trade implements Comparable<Trade>{
 		this.activeClass = activeClass;
 		this.activeCurrency = activeCurrency;
 		
+		setLocaleDecimalSeparator();
+		
+	    
+   		
+	}
+	private void setLocaleDecimalSeparator() {
+		m_locale =new Locale("ru", "RU");
+		m_nf = NumberFormat.getNumberInstance(m_locale);
+	    m_df = (DecimalFormat)m_nf;
+	    m_df.setGroupingUsed(false);
 	}
 	public Trade() {
-		 
+		setLocaleDecimalSeparator(); 
 	}
 	public void setbBuySell(boolean bBuySell) {
 		this.bBuySell = bBuySell;
@@ -113,12 +134,13 @@ public class Trade implements Comparable<Trade>{
 		DateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 		date = formatter.format(this.getDealDate());
 		String activeTradeString =  getActiveClassName()+  ";"
-			                   + getActiveCurrency() + ";" + getExchRate()+ ";"
-			                   + getTicketName() + ";"+ date + ";"+ getQuantity()+ ";"
-			                   + getDealPrice() + ";" + getDealPrice()* getExchRate()+ ";"
-			                   + getCommission() + ";" + getCommission()* getExchRate()+ ";"
-			                   + getQuantity()* getDealPrice()+ ";"
-			                   + getQuantity()* getDealPrice() * getExchRate()+ "\n";
+			                   + getActiveCurrency() + ";" + getLocaleNubmer(getExchRate())+ ";"
+			                   + getTicketName() + ";"+ date + ";"+ getLocaleNubmer(getQuantity())+ ";"
+			                   + getLocaleNubmer(getDealPrice()) + ";"
+			                   + getLocaleNubmer(getDealPrice()* getExchRate())+ ";"
+			                   + getLocaleNubmer(getCommission()) + ";" + getLocaleNubmer(getCommission()* getExchRate())+ ";"
+			                   + getLocaleNubmer(getQuantity()* getDealPrice())+ ";"
+			                   + getLocaleNubmer(getQuantity()* getDealPrice() * getExchRate())+ "\n";
 			          
 			return activeTradeString;
 			                   		
@@ -163,5 +185,9 @@ public class Trade implements Comparable<Trade>{
 	}
 	public String getActiveClassName() {
 		return getActiveClass().equals("STK")?"Акция":"Опцион";
+	}
+	
+	public String getLocaleNubmer(float num) {
+		return m_df.format(num);
 	}
 }

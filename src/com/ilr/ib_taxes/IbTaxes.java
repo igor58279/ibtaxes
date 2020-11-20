@@ -66,8 +66,8 @@ public class IbTaxes {
 		
 		
 		
-		trades.printAllTaxes("/Users/igor/Brokerage/IB/1.csv");
-		trades.printActive("/Users/igor/Brokerage/IB/2.csv");
+		trades.printAllTaxes("/Users/igor/Brokerage/IB/taxes.csv");
+		trades.printActive("/Users/igor/Brokerage/IB/open.csv");
 		
 	}
 

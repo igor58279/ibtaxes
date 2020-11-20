@@ -128,20 +128,21 @@ public class ClosedTrade extends Trade {
 		date2 = formatter.format(this.closingDealDate);
 		
 		String closedDealStr = getActiveClassName()+  ";"
-		                   + getActiveCurrency() + ";" + getExchRate()+ ";"
-		                   + getTicketName() + ";"+ date1 + ";"+ getQuantity()+ ";"
-		                   + getDealPrice() + ";" + getDealPrice()* getExchRate()+ ";"
-		                   + getCommission() + ";" + getCommission()* getExchRate()+ ";"
-		                   + getQuantity()* getDealPrice()+ ";"
-		                   + getQuantity()* getDealPrice() * getExchRate()
-		                   + "\r\n ;;" + getClosingRate()+";;"
-		                   + date2 +";" + -1 * getQuantity() +";"
-		                   + getClosingPrice()+ ";" + getClosingPrice()* getClosingRate()+";"
-		                   + getClosingCommission() +";" + getClosingCommission()* getClosingRate()+";"
-		                   + -1 * getQuantity()* getClosingPrice()+ ";"
-		                   + -1 * getQuantity()* getClosingPrice() * getClosingRate() + ";"
-		                   + getDealResultUsd() + ";" + getDealResult()+ ";"
-		                   + getTax() + "\n";
+		                   + getActiveCurrency() + ";" + getLocaleNubmer(getExchRate()) + ";"
+		                   + getTicketName() + ";"+ date1 + ";"+ getLocaleNubmer(getQuantity()) + ";"
+		                   + getLocaleNubmer(getDealPrice()) + ";" + getLocaleNubmer(getDealPrice()* getExchRate()) + ";"
+		                   + getLocaleNubmer(getCommission()) + ";" + getLocaleNubmer(getCommission()* getExchRate()) + ";"
+		                   + getLocaleNubmer(getQuantity()* getDealPrice())+ ";"
+		                   + getLocaleNubmer(getQuantity()* getDealPrice() * getExchRate())
+		                   + "\n ;;" + getLocaleNubmer(getClosingRate())+";;"
+		                   + date2 +";" + getLocaleNubmer(-1 * getQuantity()) +";"
+		                   + getLocaleNubmer(getClosingPrice()) + ";" + getLocaleNubmer(getClosingPrice()* getClosingRate()) + ";"
+		                   + getLocaleNubmer(getClosingCommission()) + ";" 
+		                   + getLocaleNubmer(getClosingCommission()* getClosingRate())+";"
+		                   + getLocaleNubmer(-1 * getQuantity()* getClosingPrice()) + ";"
+		                   + getLocaleNubmer(-1 * getQuantity()* getClosingPrice() * getClosingRate()) + ";"
+		                   + getLocaleNubmer(getDealResultUsd()) + ";" + getLocaleNubmer(getDealResult())+ ";"
+		                   + getLocaleNubmer(getTax()) + "\n";
 		return closedDealStr;
 	}
 
