@@ -13,9 +13,11 @@ public class TaxStatement {
 		m_lstTrade = trades;
 		m_lstClosed = null;
 	}
-	public void calculateTax() {
+	
+	//calculates tax for specific ticker and returns closed statement tax strings only
+	public ArrayList<String> doTax() {
 
-		
+		ArrayList<String> taxStrList = null;
 		boolean bClosedTrade;
 		do {
 			bClosedTrade = closeTrades();
@@ -27,23 +29,16 @@ public class TaxStatement {
 			
 		//we have to lists  - open positions and closed ones
 		// just print for debugging purposes
-		for(int i =0; i<m_lstTrade.size();i++) {
-	    	System.out.println(m_lstTrade.get(i));
-	    }
 		
 		
-		if(m_lstClosed !=null) {
-			
-						
+		
+		if(m_lstClosed != null) {
+			taxStrList = new ArrayList<String>();
 			for(int i =0; i<m_lstClosed.size();i++) {
-		    	m_lstClosed.get(i).printClosedDeal();
+				taxStrList.add( m_lstClosed.get(i).toClosedTaxStr());
 			}
-			
-
-		}
-		
-			
-
+		}	
+		return taxStrList;	
 	}
 	
 	public boolean closeTrades() {

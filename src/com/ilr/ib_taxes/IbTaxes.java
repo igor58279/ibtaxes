@@ -65,14 +65,10 @@ public class IbTaxes {
 		trades.printMap();
 		
 		
-		System.out.println( "Класс актива,Валюта,Курс рубля ЦБ РФ,	Символ.	Дата Открытия/Дата закрытия,Количество,	Цена за единицу USD,	Цена за единицу РУБ,	Комиссия USD,	Комиссия РУБ,Стоимость покупки/Стоимость продажи USD,Стоимость покупки/Стоимость продажи РУБ,	Прибыль/Убыток USD	Прибыль/Убыток РУБ,	Налог к уплате/вычету 13%");
-		trades.printTax("GILD");
-		trades.printTax("RDS A");
-		trades.printTax("GILD");
-		trades.printTax("AAL   210115C00030000");
-		trades.printTax("KSS");
-		trades.printTax("XEC");
-		trades.printTax("CMA");
+		
+		trades.printAllTaxes("/Users/igor/Brokerage/IB/1.csv");
+		trades.printActive("/Users/igor/Brokerage/IB/2.csv");
+		
 	}
 
 }

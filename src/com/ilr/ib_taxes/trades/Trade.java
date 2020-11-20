@@ -1,9 +1,11 @@
 package com.ilr.ib_taxes.trades;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Trade implements Comparable<Trade>{
-	
+	private static final String DATE_FORMAT = "dd/MM/yyyy";
 	private String ticketName;
 	
 	//it's possible to have fractional shares
@@ -22,6 +24,8 @@ public class Trade implements Comparable<Trade>{
 	private Date settleDate;
 	private String activeClass;
 	private String activeCurrency;
+	
+	DateFormat m_formatter = new SimpleDateFormat(DATE_FORMAT);
 	
 	
 	public String getTicketName() {
@@ -58,9 +62,10 @@ public class Trade implements Comparable<Trade>{
 		this.settleDate = settleDate;
 		this.activeClass = activeClass;
 		this.activeCurrency = activeCurrency;
+		
 	}
 	public Trade() {
-		// TODO Auto-generated constructor stub
+		 
 	}
 	public void setbBuySell(boolean bBuySell) {
 		this.bBuySell = bBuySell;
@@ -103,7 +108,21 @@ public class Trade implements Comparable<Trade>{
 				+ ", settleDate=" + settleDate + ", activeClass=" + activeClass + ", activeCurrency=" + activeCurrency
 				+ "]";
 	}
-	
+	public String toTaxString() {
+		String date;
+		DateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
+		date = formatter.format(this.getDealDate());
+		String activeTradeString =  getActiveClassName()+  ";"
+			                   + getActiveCurrency() + ";" + getExchRate()+ ";"
+			                   + getTicketName() + ";"+ date + ";"+ getQuantity()+ ";"
+			                   + getDealPrice() + ";" + getDealPrice()* getExchRate()+ ";"
+			                   + getCommission() + ";" + getCommission()* getExchRate()+ ";"
+			                   + getQuantity()* getDealPrice()+ ";"
+			                   + getQuantity()* getDealPrice() * getExchRate()+ "\n";
+			          
+			return activeTradeString;
+			                   		
+	}
 	public int compareTo(Trade t) {
 	    
 	    return getDealDate().compareTo(t.getDealDate());
@@ -117,7 +136,7 @@ public class Trade implements Comparable<Trade>{
 		if(!bBuySell)
 			k *= -1;
 			
-		return k * quantity *dealPrice ;
+		return k * quantity * dealPrice ;
 	}
 	public float getAmountCur2() {
 		
@@ -128,7 +147,7 @@ public class Trade implements Comparable<Trade>{
 		if(!bBuySell)
 			k *= -1;
 			
-		return k * quantity *dealPrice * exchRate;
+		return k * quantity * dealPrice * exchRate;
 		
 	}
 	
