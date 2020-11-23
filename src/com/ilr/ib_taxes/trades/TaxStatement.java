@@ -27,7 +27,7 @@ public class TaxStatement {
 		//Now we have in m_lstTrade open positions
 		// and m_lstClosed - closed positions
 			
-		//we have to lists  - open positions and closed ones
+		//we have two lists  - open positions and closed ones
 		// just print for debugging purposes
 		
 		

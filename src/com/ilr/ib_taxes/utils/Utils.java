@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import com.ilr.ib_taxes.payments.CashTransaction;
 import com.ilr.ib_taxes.trades.Trade;
 
 public class Utils {
@@ -26,6 +28,15 @@ public class Utils {
 	
 	private static final int CB_RATE = 2;
 	private static final int CB_DATE_COL = 1;
+	
+	private static final int CASH_TICKER_NAME = 6;
+	private static final int CASH_TICKER_DESCRIPTION = 7;
+	private static final int CASH_TICKER_CURRENCY = 3;
+	private static final int CASH_AMOUNT = 26;
+	private static final int CASH_TRANSTYPE = 27;
+	private static final int CASH_DATE = 31;
+	
+	
 	
 	SimpleDateFormat formatter, exchFormatter;  
 	
@@ -102,6 +113,33 @@ public class Utils {
 		return trade;
 	}
 	
+	public CashTransaction getCashTransactionFromLine(int i,String[] line) {
+		CashTransaction cash = new CashTransaction();
+		try {
+			cash.setTicker(stripQuotes(line[CASH_TICKER_NAME]));
+			
+			cash.setCurrency(stripQuotes(line[CASH_TICKER_CURRENCY]));
+			
+			cash.setDescription(stripQuotes(line[CASH_TICKER_DESCRIPTION]));
+			
+			
+			cash.setAmount(Float.parseFloat(stripQuotes(line[CASH_AMOUNT])));
+			
+			
+			cash.setTransType(stripQuotes(line[CASH_TRANSTYPE]));
+			
+			Date dealDate=formatter.parse(stripQuotes(line[CASH_DATE]));
+			cash.setCashDate(dealDate);
+			
+		}
+		catch (Exception e){
+			System.out.println("Bad line : " + i + " "+ e.getMessage());
+			return null;
+		}
+		return cash;
+	}
+	
+	
 	public CurrencyRate getCurrencyRateFromLine(int i,String[] line) {
 		CurrencyRate curRate = null;
 		try {
@@ -118,6 +156,44 @@ public class Utils {
 		
 		return curRate;
 	}
+//	public CashTransaction getCashTransactionFromLine(int i,String[] line) {
+//		CashTransaction cashTransaction = new CashTransaction();
+//		String tmpStr;
+//		try {
+//			trade.setTicketName(stripQuotes(line[TICKET_NAME]));
+//			
+//			trade.setActiveCurrency(stripQuotes(line[CURRENCY]));
+//			
+//			trade.setbBuySell(stripQuotes(line[ACTION]).matches("BUY")? true: false);
+//			
+//			trade.setQuantity(Float.parseFloat(stripQuotes(line[QUANTITY])));
+//			
+//			trade.setDealPrice(Float.parseFloat(stripQuotes(line[DEAL_PRICE])));
+//			
+//			trade.setCommission(Float.parseFloat(stripQuotes(line[DEAL_COMISSION])));
+//			
+//			trade.setActiveClass(stripQuotes(line[ACTIVE_CLASS]));
+//			
+//			Date dealDate=formatter.parse(stripQuotes(line[DEAL_DATE]));
+//			trade.setDealDate(dealDate);
+//			
+//			tmpStr = stripQuotes(line[SETTLE_DATE]);
+//			if(tmpStr == null) {
+//				trade.setSettleDate(dealDate);
+//			}
+//			else {
+//				Date settleDate = formatter.parse(tmpStr);
+//				trade.setSettleDate(settleDate);
+//			}
+//		
+//		}
+//		catch (Exception e){
+//			System.out.println("Bad line : " + i + " "+ e.getMessage());
+//			return null;
+//		
+//		}
+//		return cashTransaction;
+//	}
 	
 	
 	public String stripQuotes(String s) {
