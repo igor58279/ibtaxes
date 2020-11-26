@@ -76,22 +76,32 @@ public class CashTransactions {
 	    ClosedDivTransaction closedDiv = m_divActivity.get(divKey);
 	    if(closedDiv == null) {
 	    	//first entry of dividend activity for this stock on this day.
-	    	
 	    	closedDiv = new ClosedDivTransaction(cash.getTicker(), cash.getDescription(), cash.getExchRate(), cash.getAmount(),
 	    			cash.getCashDate(), cash.getTransType(), cash.getCurrency());
 	    	m_divActivity.put(divKey, closedDiv);  
 	    }
-	    else {
-	    	//currently i assume only 2 cash activities a day on the same ticker - if i'm wrong - print the error!!!
-	    	if(closedDiv.getClosedTransType()!= null) {
-	    		System.out.println("Attention!!! " + cash);
-	    		//throw new Exception("Third transaction in this day " + cash);	
+	    else if (closedDiv.getClosedTransType() == null) {
+	    	//second time entry
+	    	if(closedDiv.getAmount() * cash.getAmount() >= 0){
+		    	// in the case of zero tax it still works
+		    	// if result  > 0 it means that both are same sign transactions -payments or taxes
+	    		//just sum the amounts 
+	    		closedDiv.setAmount(closedDiv.getAmount() + cash.getAmount());
 	    	}
 	    	else {
+	    		//we have different sign transaction
 	    		closedDiv.setClosedAmount(cash.getAmount());
 	    		closedDiv.setClosedTransType(cash.getTransType());
-	    		closedDiv.setClosedDescription(cash.getDescription());
+	    		closedDiv.setClosedDescription(cash.getDescription());	
 	    	}
+	    }
+	    else {
+
+	    	  //both actions are ready - find the correct one and add to it the amount
+	    	if(closedDiv.getAmount() * cash.getAmount() >= 0)
+	    		closedDiv.setAmount(closedDiv.getAmount() + cash.getAmount());
+	    	else
+	    		closedDiv.setClosedAmount(closedDiv.getClosedAmount() + cash.getAmount());
 	    }
 	    
 	}
