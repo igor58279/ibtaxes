@@ -115,6 +115,7 @@ public class Utils {
 	
 	public CashTransaction getCashTransactionFromLine(int i,String[] line) {
 		CashTransaction cash = new CashTransaction();
+		
 		try {
 			cash.setTicker(stripQuotes(line[CASH_TICKER_NAME]));
 			

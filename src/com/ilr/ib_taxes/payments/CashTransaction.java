@@ -14,6 +14,22 @@ public class CashTransaction implements Comparable<CashTransaction> {
 	private String m_Currency;
 	
 	
+	public CashTransaction(String m_ticker, String m_description, float m_exchRate, float m_amount, Date m_cashDate,
+			String m_transType, String m_Currency) {
+		super();
+		this.m_ticker = m_ticker;
+		this.m_description = m_description;
+		this.m_exchRate = m_exchRate;
+		this.m_amount = m_amount;
+		this.m_cashDate = m_cashDate;
+		this.m_transType = m_transType;
+		this.m_Currency = m_Currency;
+	}
+	public CashTransaction()
+	{
+		
+	}
+	
 	public String getTicker() {
 		return m_ticker;
 	}
