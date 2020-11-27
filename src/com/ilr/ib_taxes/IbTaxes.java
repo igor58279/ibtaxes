@@ -12,6 +12,7 @@ import com.ilr.ib_taxes.trades.Trade;
 import com.ilr.ib_taxes.trades.Trades;
 import com.ilr.ib_taxes.utils.CurrencyRate;
 import com.ilr.ib_taxes.utils.CurrencyRates;
+import com.ilr.ib_taxes.utils.PersonalData;
 import com.ilr.ib_taxes.utils.Utils;
 
 public class IbTaxes {
@@ -52,7 +53,7 @@ public class IbTaxes {
 		String[] ib_statements_files  = statements_files.split(splitter);
 		
 		
-		
+		PersonalData persData = new PersonalData(appProps);
 		
 		Utils utils = new Utils();
 		
@@ -68,7 +69,7 @@ public class IbTaxes {
 				String[] line = csvData.get(i);
 				CurrencyRate  exchRate = utils.getCurrencyRateFromLine(i, line);
 				if(exchRate != null) {
-					System.out.println(exchRate);
+					//System.out.println(exchRate);
 					curRates.addRate(exchRate.getDate(), exchRate.getExchRate());
 				}
 			
@@ -78,7 +79,7 @@ public class IbTaxes {
 		
 		splitter=",";
 		Float exRate;
-		Trades trades = new Trades();
+		Trades trades = new Trades(persData.getHeaderLines());
 		for(int files=0;files < ib_statements_files.length; files++) {
 			
 				
@@ -94,7 +95,7 @@ public class IbTaxes {
 				if(trade !=null) {
 					exRate = curRates.getRate(trade.getDealDate());
 					trade.setExchRate(exRate);
-					System.out.println(trade);
+					//System.out.println(trade);
 					trades.AddTrade(trade);
 				}
 				else {
@@ -113,7 +114,7 @@ public class IbTaxes {
 		}
 		
 		
-		CashTransactions cashTransactions = new CashTransactions();
+		CashTransactions cashTransactions = new CashTransactions(persData.getHeaderLines());
 		
 		for(int files=0;files < cash_activity_files.length; files++) {
 			List<String[]> csvData = utils.getCsv(statements_dir + cash_activity_files[files],splitter);
@@ -128,7 +129,7 @@ public class IbTaxes {
 				if(cash != null) {
 					exRate = curRates.getRate(cash.getCashDate());
 					cash.setExchRate(exRate);
-					System.out.println(cash);
+					//System.out.println(cash);
 					cashTransactions.AddCashTransaction(cash);
 				}
 				else {

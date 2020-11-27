@@ -13,21 +13,16 @@ import java.util.Map;
 public class Trades {
 	
 	//Read parameters from configuration
-	private static final String[] HEADER_LINES = {"\n\n","Период;01/01/20;12/31/20\n",		
-	"Имя брокера;Interactive Brokers;Адрес брокера;Two Pickwick Plaza,Greenwich,CT 06830\n",	
-	"Имя;Ройтман;Игорь;Львович\n"	,
-	"Имя(английский);Roitman;Igor\n",		
-	"Счет;U3298246\n",		
-	"Базовая валюта;USD\n",		
-	"Тип счета;Индивидуальный\n",	
-	"Возможности счета;Маржа","\n\n",
-	"Класс актива;Валюта;Курс рубля ЦБ РФ;Символ;Дата Открытия/Закрытия;Вид сделки;Количество;Цена за единицу USD;Цена за единицу РУБ;Комиссия USD;Комиссия РУБ;Стоимость покупки/продажи USD;Стоимость покупки/продажи РУБ;Прибыль/Убыток USD;Прибыль/Убыток РУБ;Налог к уплате/вычету 13%\n"};		
+	private static final String HEADER_LINE = 
+	"Класс актива;Валюта;Курс рубля ЦБ РФ;Символ;Дата Открытия/Закрытия;Вид сделки;Количество;Цена за единицу USD;Цена за единицу РУБ;Комиссия USD;Комиссия РУБ;Стоимость покупки/продажи USD;Стоимость покупки/продажи РУБ;Прибыль/Убыток USD;Прибыль/Убыток РУБ;Налог к уплате/вычету 13%\n";		
 	
-	
+	private String[] m_header_lines;
 	
 	Map<String,List<Trade>> activeTrades;
 	
-	public Trades() {
+	public Trades(String[] headerLines) {
+		
+		m_header_lines = headerLines;
 		activeTrades = new HashMap<String,List<Trade>>();
 	}
 	
@@ -135,9 +130,10 @@ public class Trades {
 	}
 	public void printHeader(BufferedWriter bw) {
 		try {
-			for(int i=0;i<HEADER_LINES.length;i++)
+			for(int i = 0;i < m_header_lines.length;i++)
+				bw.write(m_header_lines[i]);
+			bw.write(HEADER_LINE);
 			
-				bw.write(HEADER_LINES[i]);
 			} catch (IOException e) {
 				System.err.format("IOException: %s%n", e);
 		}

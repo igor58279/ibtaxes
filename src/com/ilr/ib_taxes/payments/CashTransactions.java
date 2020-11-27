@@ -20,15 +20,8 @@ import java.util.Map;
 
 //!!!Stock dividends and taxes on it not included
 public class CashTransactions {
-	//Read parameters from configuration
-	private static final String[] HEADER_LINES = {"\n\n","Период;01/01/20;12/31/20\n",		
-	"Имя брокера;Interactive Brokers;Адрес брокера;Two Pickwick Plaza,Greenwich,CT 06830\n",	
-	"Имя;Ройтман;Игорь;Львович\n"	,
-	"Имя(английский);Roitman;Igor\n",		
-	"Счет;U3298246\n",		
-	"Базовая валюта;USD\n",		
-	"Тип счета;Индивидуальный\n",	
-	"Возможности счета;Маржа","\n\n"	};		
+	
+	
 	
 	//Header lines for cash and divs transactions
 	private static final String DIVS_LINE = "Валюта;Курс рубля ЦБ РФ;Символ;Дата Выплаты;Комиссия USD;Комиссия РУБ;Сумма USD;Сумма РУБ;Удержан налог брокером,USD;Налог у брокера %;% к уплате Россия;Налог к уплате 13%\n";
@@ -42,14 +35,18 @@ public class CashTransactions {
 	List<CashTransaction> m_cashActivities;
 	
 	Map<String,ClosedDivTransaction> m_divActivity;
-	
+	private String[] m_header_lines;
 
 	Locale m_locale; 
 	NumberFormat m_nf;
 	DecimalFormat m_df;
 	
 	
-	public CashTransactions(){
+	public CashTransactions(String[] headerLines){
+		
+		
+			
+		m_header_lines = headerLines;
 		formatter = new SimpleDateFormat("yyyy-MM-dd");
 		
 		m_cashActivities = new ArrayList<CashTransaction>();
@@ -174,8 +171,8 @@ public class CashTransactions {
 	
 	public void printHeader(boolean bDivs, BufferedWriter bw) {
 		try {
-				for(int i=0;i<HEADER_LINES.length;i++)
-					bw.write(HEADER_LINES[i]);
+				for(int i=0;i<m_header_lines.length;i++)
+					bw.write(m_header_lines[i]);
 				if(bDivs)
 					bw.write(DIVS_LINE);
 				else
