@@ -22,7 +22,7 @@ public class IbTaxes {
 		
 		//Get config file and read parameters
 		String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-		String appConfigPath = rootPath + "app.cfg";
+		String appConfigPath = rootPath + "app1.cfg";
 		
 		
 		System.out.println( "Reading configuration from: " + appConfigPath);
@@ -64,15 +64,13 @@ public class IbTaxes {
 			
 			System.out.println( "Processing " + statements_dir + exchange_rates_files[files]);
 			
-			//skip header
-			for (int i=1; i<csvData.size();i++ ) {
+			//skip header line
+			for (int i=1; i < csvData.size();i++ ) {
 				String[] line = csvData.get(i);
 				CurrencyRate  exchRate = utils.getCurrencyRateFromLine(i, line);
 				if(exchRate != null) {
-					//System.out.println(exchRate);
 					curRates.addRate(exchRate.getDate(), exchRate.getExchRate());
 				}
-			
 			}
 		}
 		
@@ -80,34 +78,30 @@ public class IbTaxes {
 		splitter=",";
 		Float exRate;
 		Trades trades = new Trades(persData.getHeaderLines());
-		for(int files=0;files < ib_statements_files.length; files++) {
-			
-				
+		for(int files = 0;files < ib_statements_files.length; files++) {
 			List<String[]> csvData = utils.getCsv(statements_dir + ib_statements_files[files],splitter);
-			
 			System.out.println( "Processing " + statements_dir + ib_statements_files[files]);
 			
-			//skip header
+			//skip header line
 			for (int i=1; i<csvData.size();i++ ) {
 				String[] line = csvData.get(i);
 				
 				Trade trade = utils.getTradeFromLine(i,line);
-				if(trade !=null) {
+				if(trade != null) {
 					exRate = curRates.getRate(trade.getDealDate());
 					trade.setExchRate(exRate);
-					//System.out.println(trade);
 					trades.AddTrade(trade);
 				}
 				else {
+					//something went wrong - print the line with "empty" for empty fields for debugging
 					String field;
 					for(int j=0; j<line.length; j++) {
 						field = utils.stripQuotes(line[j]);
-						if(field!=null)
+						if(field != null)
 							System.out.print(field  +" ");
 						else
 							System.out.print("empty" + j +" ");
 					}
-				
 					System.out.println( "\n");	
 				}
 			}
@@ -116,20 +110,19 @@ public class IbTaxes {
 		
 		CashTransactions cashTransactions = new CashTransactions(persData.getHeaderLines());
 		
-		for(int files=0;files < cash_activity_files.length; files++) {
+		for(int files = 0;files < cash_activity_files.length; files++) {
 			List<String[]> csvData = utils.getCsv(statements_dir + cash_activity_files[files],splitter);
 			
 			System.out.println( "Processing " + statements_dir + cash_activity_files[files]);
 			
-			//skip header
-			for (int i=1; i<csvData.size();i++ ) {
+			//skip header line
+			for (int i = 1; i < csvData.size();i++ ) {
 				String[] line = csvData.get(i);
 
 				CashTransaction  cash = utils.getCashTransactionFromLine(i,line);
 				if(cash != null) {
 					exRate = curRates.getRate(cash.getCashDate());
 					cash.setExchRate(exRate);
-					//System.out.println(cash);
 					cashTransactions.AddCashTransaction(cash);
 				}
 				else {
@@ -145,15 +138,17 @@ public class IbTaxes {
 				}
 			}
 		}
-//		trades.printMap();
-		
+//		trades.printMap();	
 //		trades.printTickerTaxes("/Users/igor/Brokerage/IB/taxes_test.csv","PACW") ;
 		
+		//generate file with taxes for trades
 		trades.printAllTaxes(statements_dir + "taxes.csv");
+		
+		//open positions for verification purposes
 		trades.printActive(statements_dir +  "open.csv");
 		
+		//generate files with taxes for cash transactions and dividends
 		cashTransactions.printAllCashActivities(statements_dir +  "cash.csv",statements_dir +  "divs.csv");
 		
 	}
-
 }

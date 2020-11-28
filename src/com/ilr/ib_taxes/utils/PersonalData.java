@@ -1,14 +1,15 @@
 package com.ilr.ib_taxes.utils;
 
+import java.util.Locale;
 import java.util.Properties;
 
 public class PersonalData {
 	
 			private  String[] HEADER_LINES = {"\n\n","Период;%s;%s\n",		
 			"Имя брокера;Interactive Brokers;Адрес брокера;Two Pickwick Plaza,Greenwich,CT 06830\n",	
-			"Имя;Ройтман;Игорь;Львович\n"	,
-			"Имя(английский);Roitman;Igor\n",		
-			"Счет;U3298246\n",		
+			"Имя;%s;%s;%s\n"	,
+			"Имя(английский);%s;%s\n",		
+			"Счет;%s\n",		
 			"Базовая валюта;USD\n",		
 			"Тип счета;Индивидуальный\n",	
 			"Возможности счета;Маржа","\n\n"};		
@@ -38,8 +39,7 @@ public class PersonalData {
 				HEADER_LINES[1] = String.format(HEADER_LINES[1], m_period_start,m_period_end);
 				HEADER_LINES[3] = String.format(HEADER_LINES[3], m_last_name_rus,m_first_name_rus,m_middle_name_rus);
 				HEADER_LINES[4] = String.format(HEADER_LINES[4], m_last_name,m_first_name);
-				HEADER_LINES[5] = String.format(HEADER_LINES[5], m_period_start);
-				
+			
 			}
 			
 			

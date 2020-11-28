@@ -62,6 +62,11 @@ public class Utils {
 			// Parse the data by comma using .split() method
 			// Place into a temporary array, then add to List 
 			while ((testRow = br.readLine()) != null) {
+			    //!!!Igor	
+				//we have cases where splitter can be inside quotes , it's ignored by excel, but
+				// not ignored by split command
+				//the solution is walk through the line and substitute each splitter inside quotes 
+				///simple routine, later
 				String[] line = testRow.split(splitter);
 				data.add(line);
 			}
@@ -157,54 +162,25 @@ public class Utils {
 		
 		return curRate;
 	}
-//	public CashTransaction getCashTransactionFromLine(int i,String[] line) {
-//		CashTransaction cashTransaction = new CashTransaction();
-//		String tmpStr;
-//		try {
-//			trade.setTicketName(stripQuotes(line[TICKET_NAME]));
-//			
-//			trade.setActiveCurrency(stripQuotes(line[CURRENCY]));
-//			
-//			trade.setbBuySell(stripQuotes(line[ACTION]).matches("BUY")? true: false);
-//			
-//			trade.setQuantity(Float.parseFloat(stripQuotes(line[QUANTITY])));
-//			
-//			trade.setDealPrice(Float.parseFloat(stripQuotes(line[DEAL_PRICE])));
-//			
-//			trade.setCommission(Float.parseFloat(stripQuotes(line[DEAL_COMISSION])));
-//			
-//			trade.setActiveClass(stripQuotes(line[ACTIVE_CLASS]));
-//			
-//			Date dealDate=formatter.parse(stripQuotes(line[DEAL_DATE]));
-//			trade.setDealDate(dealDate);
-//			
-//			tmpStr = stripQuotes(line[SETTLE_DATE]);
-//			if(tmpStr == null) {
-//				trade.setSettleDate(dealDate);
-//			}
-//			else {
-//				Date settleDate = formatter.parse(tmpStr);
-//				trade.setSettleDate(settleDate);
-//			}
-//		
-//		}
-//		catch (Exception e){
-//			System.out.println("Bad line : " + i + " "+ e.getMessage());
-//			return null;
-//		
-//		}
-//		return cashTransaction;
-//	}
-	
-	
-	public String stripQuotes(String s) {
-		
-		if(s.length()<=2) {
-			return null;
-		}
-		StringBuilder sb = new StringBuilder(s);
-		return sb.substring(1, sb.length()-1);
 
+	
+	
+	public String stripQuotes(String s) throws Exception {
+		
+		
+		if(s.startsWith("\"") && s.endsWith("\"")) {
+			if(s.length()<=2) {
+				return null;
+			}
+			StringBuilder sb = new StringBuilder(s);
+			return sb.substring(1, sb.length()-1);
+		}
+		else {
+			System.out.println("Bad field : " + s );
+			throw new Exception("Bad field " + s);
+		}
+			
+			
 		
 	}
 	

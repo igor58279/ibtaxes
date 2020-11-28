@@ -68,11 +68,9 @@ public class Trade implements Comparable<Trade>{
 		this.quantity = quantity;
 		this.dealPrice = dealPrice;
 		this.exchRate = exchRate;
-		this.bBuySell = bBuySell;
-		if(bBuySell)
-			m_action = "Покупка";
-		else
-			m_action = "Продажа";
+		
+		setbBuySell(bBuySell);
+		
 		
 			
 		this.fCommission = fCommission;
@@ -82,8 +80,6 @@ public class Trade implements Comparable<Trade>{
 		this.activeCurrency = activeCurrency;
 		
 		setLocaleDecimalSeparator();
-		
-	    
    		
 	}
 	public String getAction() {
