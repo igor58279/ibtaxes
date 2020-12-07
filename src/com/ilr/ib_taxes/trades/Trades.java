@@ -66,7 +66,7 @@ public class Trades {
 			//not required
 		    Collections.sort( lstTrade);
 
-			TaxStatement  taxStatement = new TaxStatement((ArrayList<Trade>)lstTrade);
+			TaxStatement  taxStatement = new TaxStatement((ArrayList<Trade>)lstTrade,m_start,m_end);
 			return taxStatement.doTax();
 			
 		}

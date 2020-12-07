@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public class PersonalData {
 	
-	        private static final String CB_DATE = "MM/dd/yy";
+	        private static final String DATE = "dd/MM/yy";
 	
 			private  String[] HEADER_LINES = {"\n\n","Период;%s;%s\n",		
 			"Имя брокера;Interactive Brokers;Адрес брокера;Two Pickwick Plaza,Greenwich,CT 06830\n",	
@@ -48,7 +48,7 @@ public class PersonalData {
 				HEADER_LINES[3] = String.format(HEADER_LINES[3], m_last_name_rus,m_first_name_rus,m_middle_name_rus);
 				HEADER_LINES[4] = String.format(HEADER_LINES[4], m_last_name,m_first_name);
 				
-				SimpleDateFormat formatter = new SimpleDateFormat(CB_DATE) ;
+				SimpleDateFormat formatter = new SimpleDateFormat(DATE) ;
 				
 				try {
 					m_start = formatter.parse(m_period_start);

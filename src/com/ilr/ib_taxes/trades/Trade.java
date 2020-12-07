@@ -193,6 +193,10 @@ public class Trade implements Comparable<Trade>{
 	    	quantity -= reduce;
 	    else
 	    	quantity += reduce;
+	    
+	    //We've used commission in redyced list
+	    //now we zero it
+	    fCommission = 0.0f;
 	    	
 		return quantity == 0? true:false;
 		

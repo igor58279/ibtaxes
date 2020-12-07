@@ -1,6 +1,7 @@
 package com.ilr.ib_taxes.trades;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TaxStatement {
@@ -9,9 +10,13 @@ public class TaxStatement {
 	List<ClosedTrade> m_lstClosed;
 	boolean m_bPos;
 	
-	public TaxStatement(ArrayList<Trade> trades) {
+	Date m_start,m_end;
+	
+	public TaxStatement(ArrayList<Trade> trades,Date start,Date end) {
 		m_lstTrade = trades;
 		m_lstClosed = null;
+		m_start = start;
+		m_end = end;
 	}
 	
 	//calculates tax for specific ticker and returns closed statement tax strings only
@@ -35,7 +40,13 @@ public class TaxStatement {
 		if(m_lstClosed != null) {
 			taxStrList = new ArrayList<String>();
 			for(int i =0; i<m_lstClosed.size();i++) {
-				taxStrList.add( m_lstClosed.get(i).toClosedTaxStr());
+				
+				
+				String closedTrade = m_lstClosed.get(i).toClosedTaxStr(m_start,m_end);
+				if(closedTrade != null )
+					taxStrList.add( closedTrade);
+				else //debug 
+					System.out.println( "Another period:" + m_lstClosed.get(i));
 			}
 		}	
 		return taxStrList;	
@@ -76,7 +87,7 @@ public class TaxStatement {
 			    	m_lstClosed = new ArrayList<ClosedTrade>();
 			    m_lstClosed.add(closedTrade);
 			    
-			    //Reduce list with open trades
+			    //Reduce list with open trades and commissions
 			    boolean b1 = m_lstTrade.get(0).adjustQuantity(fReduce);
 			    boolean b2 = m_lstTrade.get(i).adjustQuantity(fReduce);
 			    

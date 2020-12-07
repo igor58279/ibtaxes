@@ -124,7 +124,7 @@ public class CashTransactions {
 			sortTransactions();
 			
 			CashTransaction cashTransaction;
-			for(int i =0; i<m_cashActivities.size();i++) {
+			for(int i = 0; i < m_cashActivities.size();i++) {
 				
 				cashTransaction = m_cashActivities.get(i);
 				if(cashTransaction.getTransType().equals("Broker Interest Paid")
@@ -132,7 +132,13 @@ public class CashTransactions {
 				|| cashTransaction.getTransType().equals("Commission Adjustments") // это уточнение брокерской комиссии и не учитывается в дивидентах
 				|| (cashTransaction.getTicker()== null && cashTransaction.getTransType().equals("Other Fees"))) {
 					//cash action
-					bwCash.write(toCashTaxStr(cashTransaction));
+					if(!cashTransaction.getCashDate().before(m_start) && !cashTransaction.getCashDate().after(m_end) ) {
+						bwCash.write(toCashTaxStr(cashTransaction));
+					}
+					else {
+						//not in period
+						System.out.println( "Another period:" + cashTransaction.toString());
+					}
 				}
 				else if(cashTransaction.getTransType().equals("Payment In Lieu Of Dividends")
 						|| cashTransaction.getTransType().equals("Dividends")
@@ -159,7 +165,12 @@ public class CashTransactions {
 			for (Map.Entry<String, ClosedDivTransaction> set : m_divActivity.entrySet()) {
 				closedTransaction = set.getValue();
 				closedTransaction.calculateTax();
-				lstDividends.add(closedTransaction);
+				if(!closedTransaction.getCashDate().before(m_start) && !closedTransaction.getCashDate().after(m_end)) {
+					
+					lstDividends.add(closedTransaction);
+				}else {
+					System.out.println("Another period:" + closedTransaction);
+				}
 			}	
 			Collections.sort( lstDividends);
 			for (int i=0; i < lstDividends.size();i++) {
@@ -238,4 +249,5 @@ public String toDividendTaxStr(ClosedDivTransaction closedCash) {
 	    m_df = (DecimalFormat)m_nf;
 	    m_df.setGroupingUsed(false);
 	}
+	
 }

@@ -126,7 +126,7 @@ public class ClosedTrade extends Trade {
 			closingAmount *= -1;
 		return closingAmount *   Math.abs(getQuantity())  * closingPrice * closingRate;
 	}
-	public String toClosedTaxStr() {
+	public String toClosedTaxStr(Date start,Date end) {
 		String date1, date2;
 		
 		DateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
@@ -134,8 +134,9 @@ public class ClosedTrade extends Trade {
 		date1 = formatter.format(this.getDealDate());
 		date2 = formatter.format(this.closingDealDate);
 		
+		if(isClosingDateInRange(this.getDealDate(),this.closingDealDate,start,end)) {
 		
-		String closedDealStr = getActiveClassName()+  ";"
+			String closedDealStr = getActiveClassName()+  ";"
 		                   + getActiveCurrency() + ";" + getLocaleNubmer(getExchRate()) + ";"
 		                   + getTicketName() + ";"+ date1 + ";" + getAction() + ";"
 		                   + getLocaleNubmer(getQuantity()) + ";"
@@ -152,7 +153,21 @@ public class ClosedTrade extends Trade {
 		                   + getLocaleNubmer(getClosingAmountCur2()) + ";"
 		                   + getLocaleNubmer(getDealResultUsd()) + ";" + getLocaleNubmer(getDealResult())+ ";"
 		                   + getLocaleNubmer(getTax()) + "\n";
-		return closedDealStr;
+			return closedDealStr;
+		}
+		else 
+			return null;
 	}
 
+	public boolean isClosingDateInRange(Date d1,Date d2, Date start, Date end) {
+		
+		//Get the max date
+		Date maxDate = (d1.after(d2)) ? d1 : d2;
+		
+		if (!maxDate.before (start) && !maxDate.after (end))
+			return true;
+		else 
+			return false;
+		
+	}
 }

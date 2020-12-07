@@ -203,17 +203,6 @@ public class Utils {
 		
 	}
 	
-	public boolean isClosingDateInRange(Date d1,Date d2, Date start, Date end) {
-		
-		//Get the max date
-		Date maxDate = (d1.after(d2)) ? d1 : d2;
-		
-		if (!maxDate.before (start) && !maxDate.after (end))
-			return true;
-		else 
-			return false;
-		
-	}
 	
 	
 }
