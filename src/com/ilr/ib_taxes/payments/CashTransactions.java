@@ -130,7 +130,8 @@ public class CashTransactions {
 				if(cashTransaction.getTransType().equals("Broker Interest Paid")
 				|| cashTransaction.getTransType().equals("Broker Interest Received")
 				|| cashTransaction.getTransType().equals("Commission Adjustments") // это уточнение брокерской комиссии и не учитывается в дивидентах
-				|| (cashTransaction.getTicker()== null && cashTransaction.getTransType().equals("Other Fees"))) {
+				|| cashTransaction.getTransType().equals("Other Fees")) {          // put it here even if it's related to some stock
+					
 					//cash action
 					if(!cashTransaction.getCashDate().before(m_start) && !cashTransaction.getCashDate().after(m_end) ) {
 						bwCash.write(toCashTaxStr(cashTransaction));
@@ -142,8 +143,7 @@ public class CashTransactions {
 				}
 				else if(cashTransaction.getTransType().equals("Payment In Lieu Of Dividends")
 						|| cashTransaction.getTransType().equals("Dividends")
-						|| cashTransaction.getTransType().equals("Withholding Tax") 
-						|| cashTransaction.getTransType().equals("Other Fees") ) {
+						|| cashTransaction.getTransType().equals("Withholding Tax") ) {
 					//tax and dividend are in different transactions
 					//moreover - it's possible that there is no tax at all
 					//the solution:
