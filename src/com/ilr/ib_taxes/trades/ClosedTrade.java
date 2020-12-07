@@ -115,7 +115,7 @@ public class ClosedTrade extends Trade {
 		if(!closingAction)
 			closingAmount *= -1;
 			
-		return closingAmount * getQuantity()  * closingPrice ;
+		return closingAmount * Math.abs(getQuantity())  * closingPrice ;
 	}
 	public float getClosingAmountCur2() {
 		float closingAmount = 1;
@@ -124,7 +124,7 @@ public class ClosedTrade extends Trade {
 			closingAmount = 100;
 		if(!closingAction)
 			closingAmount *= -1;
-		return closingAmount*  getQuantity()  * closingPrice * closingRate;
+		return closingAmount *   Math.abs(getQuantity())  * closingPrice * closingRate;
 	}
 	public String toClosedTaxStr() {
 		String date1, date2;

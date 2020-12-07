@@ -77,7 +77,7 @@ public class IbTaxes {
 		
 		splitter=",";
 		Float exRate;
-		Trades trades = new Trades(persData.getHeaderLines());
+		Trades trades = new Trades(persData.getHeaderLines(),persData.getStart(),persData.getEnd());
 		for(int files = 0;files < ib_statements_files.length; files++) {
 			List<String[]> csvData = utils.getCsv(statements_dir + ib_statements_files[files],splitter);
 			System.out.println( "Processing " + statements_dir + ib_statements_files[files]);
@@ -108,7 +108,7 @@ public class IbTaxes {
 		}
 		
 		
-		CashTransactions cashTransactions = new CashTransactions(persData.getHeaderLines());
+		CashTransactions cashTransactions = new CashTransactions(persData.getHeaderLines(),persData.getStart(),persData.getEnd());
 		
 		for(int files = 0;files < cash_activity_files.length; files++) {
 			List<String[]> csvData = utils.getCsv(statements_dir + cash_activity_files[files],splitter);
@@ -138,8 +138,8 @@ public class IbTaxes {
 				}
 			}
 		}
-//		trades.printMap();	
-//		trades.printTickerTaxes("/Users/igor/Brokerage/IB/taxes_test.csv","PACW") ;
+		//trades.printMap();	
+		//trades.printTickerTaxes("/Users/igor/Brokerage/IB/taxes_test.csv","FANG") ;
 		
 		//generate file with taxes for trades
 		trades.printAllTaxes(statements_dir + "taxes.csv");

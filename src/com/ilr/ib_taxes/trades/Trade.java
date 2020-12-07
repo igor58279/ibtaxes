@@ -171,8 +171,7 @@ public class Trade implements Comparable<Trade>{
 		
 		if(activeClass.equals("OPT"))
 			k = 100;
-		if(!bBuySell)
-			k *= -1;
+
 			
 		return k * quantity * dealPrice ;
 	}
@@ -182,8 +181,7 @@ public class Trade implements Comparable<Trade>{
 		
 		if(activeClass.equals("OPT"))
 			k = 100;
-		if(!bBuySell)
-			k *= -1;
+
 			
 		return k * quantity * dealPrice * exchRate;
 		

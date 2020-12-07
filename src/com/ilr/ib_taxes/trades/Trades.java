@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,12 +18,15 @@ public class Trades {
 	"Класс актива;Валюта;Курс рубля ЦБ РФ;Символ;Дата Открытия/Закрытия;Вид сделки;Количество;Цена за единицу USD;Цена за единицу РУБ;Комиссия USD;Комиссия РУБ;Стоимость покупки/продажи USD;Стоимость покупки/продажи РУБ;Прибыль/Убыток USD;Прибыль/Убыток РУБ;Налог к уплате/вычету 13%\n";		
 	
 	private String[] m_header_lines;
+	private Date m_start,m_end;
 	
 	Map<String,List<Trade>> activeTrades;
 	
-	public Trades(String[] headerLines) {
+	public Trades(String[] headerLines, Date start, Date end) {
 		
 		m_header_lines = headerLines;
+		m_start = start;
+		m_end = end;
 		activeTrades = new HashMap<String,List<Trade>>();
 	}
 	

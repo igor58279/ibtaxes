@@ -1,9 +1,14 @@
 package com.ilr.ib_taxes.utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
 
 public class PersonalData {
+	
+	        private static final String CB_DATE = "MM/dd/yy";
 	
 			private  String[] HEADER_LINES = {"\n\n","Период;%s;%s\n",		
 			"Имя брокера;Interactive Brokers;Адрес брокера;Two Pickwick Plaza,Greenwich,CT 06830\n",	
@@ -23,6 +28,9 @@ public class PersonalData {
 			private String m_last_name_rus;
 			private String m_middle_name_rus;
 			
+			private Date m_start;
+			private Date m_end;
+			
 			
 			public PersonalData(Properties appProps) {
 				
@@ -39,11 +47,38 @@ public class PersonalData {
 				HEADER_LINES[1] = String.format(HEADER_LINES[1], m_period_start,m_period_end);
 				HEADER_LINES[3] = String.format(HEADER_LINES[3], m_last_name_rus,m_first_name_rus,m_middle_name_rus);
 				HEADER_LINES[4] = String.format(HEADER_LINES[4], m_last_name,m_first_name);
-			
+				
+				SimpleDateFormat formatter = new SimpleDateFormat(CB_DATE) ;
+				
+				try {
+					m_start = formatter.parse(m_period_start);
+					m_end = formatter.parse(m_period_end);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
 			}
 			
 			
 			
+			public Date getStart() {
+				return m_start;
+			}
+
+
+
+
+
+
+			public Date getEnd() {
+				return m_end;
+			}
+
+
+
+		
+
+
+
 			public String[] getHeaderLines() {
 				return HEADER_LINES;
 			}
