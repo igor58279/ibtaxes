@@ -62,11 +62,10 @@ public class Utils {
 			// Parse the data by comma using .split() method
 			// Place into a temporary array, then add to List 
 			while ((testRow = br.readLine()) != null) {
-			    //!!!Igor	
 				//we have cases where splitter can be inside quotes , it's ignored by excel, but
 				// not ignored by split command
 				//the solution is walk through the line and substitute each splitter inside quotes 
-				///simple routine, later
+				testRow = replaceAdditionalCommas(testRow);
 				String[] line = testRow.split(splitter);
 				data.add(line);
 			}
@@ -77,6 +76,26 @@ public class Utils {
 			System.out.println("ERROR: Could not read " + filename);
 		}
 		return data;
+	}
+	
+	private String replaceAdditionalCommas(String line) {
+		
+		
+		
+		char[] myChars = line.toCharArray();
+		
+		int count = 0;
+		for(int i=0;i < myChars.length; i++) {
+			if (myChars[i] == '\"') {
+				count++;
+			}
+			else if(myChars[i] == ',' && (count%2 !=0 )) {
+				//comma inside quotes - replace it, otherwise - ignore
+				System.out.println("Line with comma in quotes " + line);
+				myChars[i] = ' ';
+			}
+		}
+		return String.valueOf(myChars);
 	}
 	
 	public Trade getTradeFromLine(int i,String[] line) {
