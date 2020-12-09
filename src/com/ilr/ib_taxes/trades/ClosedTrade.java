@@ -144,7 +144,7 @@ public class ClosedTrade extends Trade {
 		                   + getLocaleNubmer(getCommission()) + ";" + getLocaleNubmer(getCommission()* getExchRate()) + ";"
 		                   + getLocaleNubmer(getAmount())+ ";"
 		                   + getLocaleNubmer(this.getAmountCur2())
-		                   + "\n ;;" + getLocaleNubmer(getClosingRate())+";;"
+		                   + "\n ;;" + getLocaleNubmer(getClosingRate())+";"+ getTicketName() + ";"
 		                   + date2 +";" + m_closingAction+ ";" + getLocaleNubmer(-1 * getQuantity()) +";"
 		                   + getLocaleNubmer(getClosingPrice()) + ";" + getLocaleNubmer(getClosingPrice()* getClosingRate()) + ";"
 		                   + getLocaleNubmer(getClosingCommission()) + ";" 

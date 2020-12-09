@@ -22,7 +22,7 @@ public class IbTaxes {
 		
 		//Get config file and read parameters
 		String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-		String appConfigPath = rootPath + "app1.cfg";
+		String appConfigPath = rootPath + "app.cfg";
 		
 		
 		System.out.println( "Reading configuration from: " + appConfigPath);
