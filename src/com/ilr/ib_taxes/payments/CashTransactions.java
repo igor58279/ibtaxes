@@ -27,6 +27,7 @@ public class CashTransactions {
 	//Header lines for cash and divs transactions
 	private static final String DIVS_LINE = "Валюта;Курс рубля ЦБ РФ;Название;Символ;Дата Выплаты;Комиссия USD;Комиссия РУБ;Сумма USD;Сумма РУБ;Удержан налог брокером,USD;Налог у брокера %;% к уплате Россия;Налог к уплате 13%\n";
 	private static final String CASH_LINE = "Валюта;Курс рубля ЦБ РФ;Действие;Дата выплаты; Сумма USD;Сумма РУБ;Налог к уплате/вычету 13%\n";
+	private static final String MOVE_LINE = "Валюта;Действие;Дата операции; Сумма USD\n";
 
 	private static final String DATE_FORMAT = "dd/MM/yyyy";
 	private static final float TAX_RATE = 0.13f;
@@ -109,16 +110,20 @@ public class CashTransactions {
 	}
 	//calculates all and prints into the file all tax line
 	//reduces all closed positions from m_activeTrades
-	public void printAllCashActivities(String fileNameCash,String fileNameDivs) throws Exception
+	public void printAllCashActivities(String fileNameCash,String fileNameDivs,String fileNameMove) throws Exception
 	{	
 		try {
 			FileWriter writerCash = new FileWriter(fileNameCash);
 			BufferedWriter bwCash = new BufferedWriter(writerCash);
-			printHeader(false,bwCash);
+			printHeader(1,bwCash);
+			
+			FileWriter writerMove = new FileWriter(fileNameMove);
+			BufferedWriter bwMove = new BufferedWriter(writerMove);
+			printHeader(2,bwMove);
 			
 			FileWriter writerDivs = new FileWriter(fileNameDivs);
 			BufferedWriter bwDivs = new BufferedWriter(writerDivs);
-			printHeader(true,bwDivs);
+			printHeader(0,bwDivs);
 			
 			
 			sortTransactions();
@@ -138,7 +143,7 @@ public class CashTransactions {
 					}
 					else {
 						//not in period
-						System.out.println( "Another period:" + cashTransaction.toString());
+						System.out.println( "Another cash period:" + cashTransaction.toString());
 					}
 				}
 				else if(cashTransaction.getTransType().equals("Payment In Lieu Of Dividends")
@@ -150,6 +155,18 @@ public class CashTransactions {
 					// create div object - put it into the map by ticker + date
 					//collect the map and print it out
 					addDividendActivity(cashTransaction);
+					
+				}
+				else if (cashTransaction.getTransType().equals("Deposits/Withdrawals")) {
+					//Save deposit transaction
+					//Don't check cash period for deposits!
+//					if(!cashTransaction.getCashDate().before(m_start) && !cashTransaction.getCashDate().after(m_end) ) {
+						bwMove.write(toCashMoveStr(cashTransaction));
+//					}
+//					else {
+//						//not in period
+//						System.out.println( "Another deposit/withdraw period:" + cashTransaction.toString());
+//					}
 					
 				}
 				else {
@@ -169,7 +186,7 @@ public class CashTransactions {
 					
 					lstDividends.add(closedTransaction);
 				}else {
-					System.out.println("Another period:" + closedTransaction);
+					System.out.println("Another dividend period:" + closedTransaction);
 				}
 			}	
 			Collections.sort( lstDividends);
@@ -180,20 +197,27 @@ public class CashTransactions {
 			
 			bwCash.close();
 			bwDivs.close();
+			bwMove.close();
+			
 		}catch (IOException e) {
 	        System.err.format("IOException: %s%n", e);
 	    }
 	}
 	
-	public void printHeader(boolean bDivs, BufferedWriter bw) {
+	public void printHeader(int nHeaderType, BufferedWriter bw) {
 		try {
 				for(int i=0;i<m_header_lines.length;i++)
 					bw.write(m_header_lines[i]);
-				if(bDivs)
-					bw.write(DIVS_LINE);
-				else
-					bw.write(CASH_LINE);
-				
+				switch(nHeaderType) {
+					case 0: bw.write(DIVS_LINE);
+					        return;
+					case 1: bw.write(CASH_LINE);
+					        return;
+					case 2: bw.write(MOVE_LINE);
+			        		return;     
+				    default:
+				    	System.out.println("Unknown header type:" + nHeaderType);
+				}
 			} catch (IOException e) {
 				System.err.format("IOException: %s%n", e);
 		}
@@ -215,6 +239,22 @@ public class CashTransactions {
 		                   + date +";" + getLocaleNubmer(cash.getAmount()) + ";" 
 		                   + getLocaleNubmer(cash.getAmount() * cash.getExchRate()) +";"
 		                   + getLocaleNubmer(cash.getAmount() * cash.getExchRate() * TAX_RATE) + "\n";
+		return cashTaxStr;
+	}
+	
+public String toCashMoveStr(CashTransaction cash) {
+		
+		//"Валюта;Действие;Дата операции; Сумма USD\n";
+		
+		String date;
+		DateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
+		
+		date = formatter.format(cash.getCashDate());
+		
+		
+		String cashTaxStr = cash.getCurrency() + ";" 
+		                   + cash.getTransType() +";"
+		                   + date +";" + getLocaleNubmer(cash.getAmount())  + "\n";
 		return cashTaxStr;
 	}
 	

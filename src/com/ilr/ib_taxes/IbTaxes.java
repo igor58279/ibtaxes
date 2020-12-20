@@ -148,7 +148,7 @@ public class IbTaxes {
 		trades.printActive(statements_dir +  "open.csv");
 		
 		//generate files with taxes for cash transactions and dividends
-		cashTransactions.printAllCashActivities(statements_dir +  "cash.csv",statements_dir +  "divs.csv");
+		cashTransactions.printAllCashActivities(statements_dir +  "cash.csv",statements_dir +  "divs.csv", statements_dir +  "move.csv");
 		
 	}
 }
