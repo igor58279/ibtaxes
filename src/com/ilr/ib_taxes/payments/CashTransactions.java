@@ -25,7 +25,7 @@ public class CashTransactions {
 	
 	
 	//Header lines for cash and divs transactions
-	private static final String DIVS_LINE = "Валюта;Курс рубля ЦБ РФ;Символ;Дата Выплаты;Комиссия USD;Комиссия РУБ;Сумма USD;Сумма РУБ;Удержан налог брокером,USD;Налог у брокера %;% к уплате Россия;Налог к уплате 13%\n";
+	private static final String DIVS_LINE = "Валюта;Курс рубля ЦБ РФ;Название;Символ;Дата Выплаты;Комиссия USD;Комиссия РУБ;Сумма USD;Сумма РУБ;Удержан налог брокером,USD;Налог у брокера %;% к уплате Россия;Налог к уплате 13%\n";
 	private static final String CASH_LINE = "Валюта;Курс рубля ЦБ РФ;Действие;Дата выплаты; Сумма USD;Сумма РУБ;Налог к уплате/вычету 13%\n";
 
 	private static final String DATE_FORMAT = "dd/MM/yyyy";
@@ -229,6 +229,7 @@ public String toDividendTaxStr(ClosedDivTransaction closedCash) {
 		
 		
 		String cashTaxStr = closedCash.getCurrency() + ";" + getLocaleNubmer(closedCash.getExchRate()) + ";"
+						   + closedCash.getDescription() +";"
 		                   + closedCash.getTicker() +";"
 		                   + date +";" + 0.0f + ";" + 0.0f + ";"  //for now zero commissions
 		                   + getLocaleNubmer(closedCash.getPaidAmount()) + ";" 

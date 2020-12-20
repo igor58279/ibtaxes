@@ -10,6 +10,7 @@ import java.util.Locale;
 public class Trade implements Comparable<Trade>{
 	private static final String DATE_FORMAT = "dd/MM/yyyy";
 	private String ticketName;
+	private String m_ticketDesctiption;
 	
 	//it's possible to have fractional shares
 	private float quantity;
@@ -43,6 +44,13 @@ public class Trade implements Comparable<Trade>{
 	public String getTicketName() {
 		return ticketName;
 	}
+	
+	public String getTicketDescription() {
+		return m_ticketDesctiption;
+	}
+	public void setTicketDescription(String ticketDescription) {
+		this.m_ticketDesctiption = ticketDescription;
+	}
 	public void setTicketName(String ticketName) {
 		this.ticketName = ticketName;
 	}
@@ -61,10 +69,11 @@ public class Trade implements Comparable<Trade>{
 	public boolean isbBuySell() {
 		return bBuySell;
 	}
-	public Trade(String ticketName, float quantity, float dealPrice, float exchRate, boolean bBuySell,
+	public Trade(String ticketDescription,String ticketName, float quantity, float dealPrice, float exchRate, boolean bBuySell,
 			float fCommission, Date dealDate, Date settleDate, String activeClass, String activeCurrency) {
 		super();
 		this.ticketName = ticketName;
+		this.m_ticketDesctiption = ticketDescription;
 		this.quantity = quantity;
 		this.dealPrice = dealPrice;
 		this.exchRate = exchRate;
@@ -150,6 +159,7 @@ public class Trade implements Comparable<Trade>{
 		date = formatter.format(this.getDealDate());
 		String activeTradeString =  getActiveClassName()+  ";"
 			                   + getActiveCurrency() + ";" + getLocaleNubmer(getExchRate())+ ";"
+			                   + getTicketDescription()+ ";"
 			                   + getTicketName() + ";"+ date + ";" + getAction() + ";"
 			                   + getLocaleNubmer(getQuantity())+ ";"
 			                   + getLocaleNubmer(getDealPrice()) + ";"

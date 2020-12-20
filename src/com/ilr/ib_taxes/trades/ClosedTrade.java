@@ -9,11 +9,11 @@ public class ClosedTrade extends Trade {
 	private static final String DATE_FORMAT = "dd/MM/yyyy";
 	private static final float TAX_RATE = 0.13f;
 	
-	public ClosedTrade(String ticketName, float quantity, float dealPrice, float exchRate, boolean bBuySell,
+	public ClosedTrade(String ticketDescription, String ticketName, float quantity, float dealPrice, float exchRate, boolean bBuySell,
 			float fCommission, Date dealDate, Date settleDate, String activeClass, String activeCurrency,
 			float closingPrice, float closingRate, boolean closingAction, float closingCommission, Date closingDealDate,
 			Date closingSettleDate) {
-		super(ticketName, quantity, dealPrice, exchRate, bBuySell, fCommission, dealDate, settleDate, activeClass,
+		super(ticketDescription,ticketName, quantity, dealPrice, exchRate, bBuySell, fCommission, dealDate, settleDate, activeClass,
 				activeCurrency);
 		this.closingPrice = closingPrice;
 		this.closingRate = closingRate;
@@ -138,13 +138,14 @@ public class ClosedTrade extends Trade {
 		
 			String closedDealStr = getActiveClassName()+  ";"
 		                   + getActiveCurrency() + ";" + getLocaleNubmer(getExchRate()) + ";"
+		                   + getTicketDescription() + ";"
 		                   + getTicketName() + ";"+ date1 + ";" + getAction() + ";"
 		                   + getLocaleNubmer(getQuantity()) + ";"
 		                   + getLocaleNubmer(getDealPrice()) + ";" + getLocaleNubmer(getDealPrice()* getExchRate()) + ";"
 		                   + getLocaleNubmer(getCommission()) + ";" + getLocaleNubmer(getCommission()* getExchRate()) + ";"
 		                   + getLocaleNubmer(getAmount())+ ";"
 		                   + getLocaleNubmer(this.getAmountCur2())
-		                   + "\n ;;" + getLocaleNubmer(getClosingRate())+";"+ getTicketName() + ";"
+		                   + "\n ;;" + getLocaleNubmer(getClosingRate())+";;"+ getTicketName() + ";"
 		                   + date2 +";" + m_closingAction+ ";" + getLocaleNubmer(-1 * getQuantity()) +";"
 		                   + getLocaleNubmer(getClosingPrice()) + ";" + getLocaleNubmer(getClosingPrice()* getClosingRate()) + ";"
 		                   + getLocaleNubmer(getClosingCommission()) + ";" 

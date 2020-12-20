@@ -14,6 +14,7 @@ import com.ilr.ib_taxes.trades.Trade;
 
 public class Utils {
 	private static final int TICKET_NAME = 5;
+	private static final int TICKET_DESCRIPTION = 6;
 	private static final int CURRENCY = 3;
 	private static final int ACTION = 40;
 	private static final int QUANTITY = 41;
@@ -103,9 +104,11 @@ public class Utils {
 		String tmpStr;
 		try {
 			trade.setTicketName(stripQuotes(line[TICKET_NAME]));
+			trade.setTicketDescription(stripQuotes(line[TICKET_DESCRIPTION]));
 			
 			trade.setActiveCurrency(stripQuotes(line[CURRENCY]));
 			
+			//miss cancelled cell - wrong approach
 			trade.setbBuySell(stripQuotes(line[ACTION]).matches("BUY")? true: false);
 			
 			trade.setQuantity(Float.parseFloat(stripQuotes(line[QUANTITY])));

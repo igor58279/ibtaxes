@@ -112,7 +112,7 @@ public class IbTaxes {
 		
 		for(int files = 0;files < cash_activity_files.length; files++) {
 			List<String[]> csvData = utils.getCsv(statements_dir + cash_activity_files[files],splitter);
-			
+			System.out.println( "Processing " + statements_dir + cash_activity_files[files]);
 
 			
 			//skip header line
