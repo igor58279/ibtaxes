@@ -22,7 +22,7 @@ public class IbTaxes {
 	public static void main(String[] args) throws Exception {
 		
 		
-		//Get config file and read parameters
+		//Get configuration file and read parameters
 		String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
 		String appConfigPath = rootPath + "app.cfg";
 		
@@ -104,6 +104,8 @@ public class IbTaxes {
 		
 		
 		splitter=",";
+		Float exRate;
+
 		
 		CorpActions  corpActions = new CorpActions(persData.getHeaderLines(),persData.getStart(),persData.getEnd());
 		for(int files = 0;ib_corp_files != null && files < ib_corp_files.length; files++) {
@@ -117,6 +119,9 @@ public class IbTaxes {
 
 				CorpAction  action = utils.getCorpActionFromLine(i,line);
 				if(action != null) {
+					exRate = curRates.getRate(action.getActionDate());
+					action.setExchRate(exRate);
+
 					corpActions.AddAction(action);
 				}
 				else {
@@ -133,7 +138,6 @@ public class IbTaxes {
 			}		
 		}
 		
-		Float exRate;
 		Trades trades = new Trades(persData.getHeaderLines(),persData.getStart(),persData.getEnd());
 		for(int files = 0;ib_statements_files != null && files < ib_statements_files.length; files++) {
 			List<String[]> csvData = utils.getCsv(statements_dir + ib_statements_files[files],splitter);
@@ -163,6 +167,9 @@ public class IbTaxes {
 				}
 			}
 		}
+		
+		//Add new corporate actions
+		trades.AddCorporateActions(corpActions.getCorporateActions());
 		
 		
 		CashTransactions cashTransactions = new CashTransactions(persData.getHeaderLines(),persData.getStart(),persData.getEnd());

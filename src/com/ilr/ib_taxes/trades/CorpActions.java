@@ -46,6 +46,9 @@ public class CorpActions {
 		setLocaleDecimalSeparator();
 	}
 	
+	public List<CorpAction> getCorporateActions(){
+		return m_corpActions;
+	}
 	public  void AddAction(CorpAction action) {
 		
 		m_corpActions.add(action);

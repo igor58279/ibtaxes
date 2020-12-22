@@ -7,6 +7,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+
+//Now it looks  extremely close to Trade class
+//But it still can hold surprises
+//But anyway classes should be designed normally and Copy/Paste is only my laziness 
+// and absence of coding practice
+
 public class CorpAction implements Comparable<CorpAction> {
 	
 	private static final String DATE_FORMAT = "dd/MM/yyyy";
@@ -14,6 +20,8 @@ public class CorpAction implements Comparable<CorpAction> {
 	private String m_ticketName;
 	private String m_actionDescription;
 	private String m_currency;
+	
+	private float m_exchRate;
 	
 	//it's possible to have fractional shares
 	private float m_quantity;
@@ -67,6 +75,13 @@ public class CorpAction implements Comparable<CorpAction> {
 		return m_ticketName;
 	}
 	
+	public float getExchRate() {
+		return m_exchRate;
+	}
+	
+	public void setExchRate(float exchRate) {
+		m_exchRate = exchRate;
+	}
 	public void setTicketName(String ticketName) {
 		m_ticketName = ticketName;
 	}
@@ -92,6 +107,13 @@ public class CorpAction implements Comparable<CorpAction> {
 	
 
 	
+
+	@Override
+	public String toString() {
+		return "CorpAction [m_assetClass=" + m_assetClass + ", m_ticketName=" + m_ticketName + ", m_actionDescription="
+				+ m_actionDescription + ", m_currency=" + m_currency + ", m_quantity=" + m_quantity + ", m_value="
+				+ m_value + ", m_ActionDate=" + m_ActionDate + "]";
+	}
 
 	public void setAssetClass(String assetClass) {
 		m_assetClass = assetClass;

@@ -143,4 +143,58 @@ public class Trades {
 		}
 		
 	}
+
+	public void AddCorporateActions(List<CorpAction> corporateActions) {
+		if(corporateActions == null)
+			return;
+		
+		
+		for(int i = 0; i < corporateActions.size();i++) {
+			
+			if(AddCorporateAction(corporateActions.get(i)) == false) {
+				System.out.format("Failed to add corporate action: %s\n",corporateActions.get(i) );
+			}
+		}
+		
+	}
+	
+	public boolean AddCorporateAction(CorpAction action) {
+			
+			String key = action.getTicketName();
+			
+			List<Trade> lstTrade = activeTrades.get(key);
+			
+			if(lstTrade == null) {
+				//We should have this ticket before - at least print warning
+				System.out.format("Unknown ticket %s\n",key );
+				return false;
+			};
+			String description = action.getActionDescription();
+			
+			if(description.contains("STOCK DIVIDEND")) {
+				//Just add it as regular trade with zero value
+				//price 0, commissions 0, exchange rate - we don't care as well
+				
+				Trade trade = new Trade(action.getActionDescription(),key, action.getQuantity(), 0, action.getExchRate(), 
+						action.getQuantity() > 0? true : false,
+						0, action.getActionDate(), action.getActionDate(), action.getAssetClass(), action.getCurrency(),false);
+						
+
+				lstTrade.add(trade);
+			}
+			else if (description.contains("MERGED")) {
+				System.out.format("MERGED event %s\n",description );
+			}
+			else {
+				System.out.format("Unknown event %s\n",description );
+			}
+			
+			return true;
+	}
 }
+
+
+
+
+
+

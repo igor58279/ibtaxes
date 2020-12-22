@@ -14,7 +14,7 @@ public class ClosedTrade extends Trade {
 			float closingPrice, float closingRate, boolean closingAction, float closingCommission, Date closingDealDate,
 			Date closingSettleDate) {
 		super(ticketDescription,ticketName, quantity, dealPrice, exchRate, bBuySell, fCommission, dealDate, settleDate, activeClass,
-				activeCurrency);
+				activeCurrency, false);
 		this.closingPrice = closingPrice;
 		this.closingRate = closingRate;
 		this.closingAction = closingAction;

@@ -38,6 +38,15 @@ public class Trade implements Comparable<Trade>{
 	private String activeCurrency;
 	private String m_action;
 	
+	private boolean m_bCorpAction;
+	
+	public boolean isCorpAction() {
+		return m_bCorpAction;
+	}
+
+	public void setCorpAction(boolean bCorpAction) {
+		m_bCorpAction = bCorpAction;
+	}
 	DateFormat m_formatter = new SimpleDateFormat(DATE_FORMAT);
 	
 	
@@ -70,7 +79,7 @@ public class Trade implements Comparable<Trade>{
 		return bBuySell;
 	}
 	public Trade(String ticketDescription,String ticketName, float quantity, float dealPrice, float exchRate, boolean bBuySell,
-			float fCommission, Date dealDate, Date settleDate, String activeClass, String activeCurrency) {
+			float fCommission, Date dealDate, Date settleDate, String activeClass, String activeCurrency, boolean bCorpAction) {
 		super();
 		this.ticketName = ticketName;
 		this.m_ticketDesctiption = ticketDescription;
@@ -88,9 +97,33 @@ public class Trade implements Comparable<Trade>{
 		this.activeClass = activeClass;
 		this.activeCurrency = activeCurrency;
 		
+		m_bCorpAction = bCorpAction;
 		setLocaleDecimalSeparator();
    		
 	}
+	
+	public Trade(String ticketDescription,String ticketName, float quantity, float dealPrice, boolean bBuySell,
+			Date dealDate, String activeClass, String activeCurrency, boolean bCorpAction) {
+		super();
+		this.ticketName = ticketName;
+		this.m_ticketDesctiption = ticketDescription;
+		this.quantity = quantity;
+		this.dealPrice = dealPrice;
+		
+		setbBuySell(bBuySell);
+		
+		
+			
+		this.dealDate = dealDate;
+		this.settleDate = dealDate;
+		this.activeClass = activeClass;
+		this.activeCurrency = activeCurrency;
+		
+		setLocaleDecimalSeparator();
+   		
+		m_bCorpAction = bCorpAction;
+	}
+	
 	public String getAction() {
 		return m_action;
 	}
@@ -106,6 +139,7 @@ public class Trade implements Comparable<Trade>{
 	    m_df.setGroupingUsed(false);
 	}
 	public Trade() {
+		m_bCorpAction = false;
 		setLocaleDecimalSeparator(); 
 	}
 	public void setbBuySell(boolean bBuySell) {
@@ -204,7 +238,7 @@ public class Trade implements Comparable<Trade>{
 	    else
 	    	quantity += reduce;
 	    
-	    //We've used commission in redyced list
+	    //We've used commission in reduced list
 	    //now we zero it
 	    fCommission = 0.0f;
 	    	
