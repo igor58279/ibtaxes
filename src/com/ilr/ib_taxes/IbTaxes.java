@@ -149,9 +149,16 @@ public class IbTaxes {
 				
 				Trade trade = utils.getTradeFromLine(i,line);
 				if(trade != null) {
-					exRate = curRates.getRate(trade.getDealDate());
-					trade.setExchRate(exRate);
-					trades.AddTrade(trade);
+					
+					if(trade.isCancel()) {
+						//just go and remove initial transaction which should be first
+						trades.removeCanceledTrade(trade.getTicketName(),trade);
+					}
+					else {
+						exRate = curRates.getRate(trade.getDealDate());
+						trade.setExchRate(exRate);
+						trades.AddTrade(trade);
+					}
 				}
 				else {
 					//something went wrong - print the line with "empty" for empty fields for debugging

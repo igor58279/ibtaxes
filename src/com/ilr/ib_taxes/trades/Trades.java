@@ -191,6 +191,27 @@ public class Trades {
 			
 			return true;
 	}
+
+	public void removeCanceledTrade(String ticketName, Trade trade) {
+		
+		List<Trade> lstTrade = activeTrades.get(ticketName);
+		
+		if(lstTrade == null) {
+			System.out.format("No prior deals with this ticket  to cancel %s\n", ticketName );
+			return;	
+		};
+		//We have deals for this stock - let's go through the list to delete matching deal
+		for (int i = 0; i < lstTrade.size(); i++) {
+			Trade trade1 = lstTrade.get(i);
+			if(trade1.getQuantity()== (-1 * trade.getQuantity()) 
+					&& trade1.getDealPrice() == trade.getDealPrice()) {
+				lstTrade.remove(i);
+				return;
+			}
+		}
+		//If we are here - there is no  deal to cancel
+		System.out.format("No deal with this ticket  to cancel %s\n", ticketName );
+	}
 }
 
 

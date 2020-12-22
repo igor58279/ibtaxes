@@ -120,8 +120,23 @@ public class Utils {
 			
 			trade.setActiveCurrency(stripQuotes(line[CURRENCY]));
 			
-			//miss cancelled cell - wrong approach
-			trade.setbBuySell(stripQuotes(line[ACTION]).matches("BUY")? true: false);
+
+			boolean bBuy;
+			if(stripQuotes(line[ACTION]).equals("BUY"))
+				bBuy = true;
+			else if(stripQuotes(line[ACTION]).equals("SELL")) {
+				bBuy = false;
+			}
+			else if(stripQuotes(line[ACTION]).equals("SELL (Ca.)")) {
+				bBuy = true;
+				trade.setCancel(true);
+			}
+			else {
+				System.out.println("Bad line : " + i + " "+ line);
+				return null;
+			}
+			trade.setbBuySell(bBuy);
+			
 			
 			trade.setQuantity(Float.parseFloat(stripQuotes(line[QUANTITY])));
 			

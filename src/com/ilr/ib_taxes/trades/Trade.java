@@ -21,7 +21,7 @@ public class Trade implements Comparable<Trade>{
 	NumberFormat m_nf;
 	DecimalFormat m_df;
 
-	
+	private boolean m_bCancel;
 	
 	public float getExchRate() {
 		return exchRate;
@@ -99,30 +99,10 @@ public class Trade implements Comparable<Trade>{
 		
 		m_bCorpAction = bCorpAction;
 		setLocaleDecimalSeparator();
-   		
+		m_bCancel = false;
 	}
 	
-	public Trade(String ticketDescription,String ticketName, float quantity, float dealPrice, boolean bBuySell,
-			Date dealDate, String activeClass, String activeCurrency, boolean bCorpAction) {
-		super();
-		this.ticketName = ticketName;
-		this.m_ticketDesctiption = ticketDescription;
-		this.quantity = quantity;
-		this.dealPrice = dealPrice;
-		
-		setbBuySell(bBuySell);
-		
-		
-			
-		this.dealDate = dealDate;
-		this.settleDate = dealDate;
-		this.activeClass = activeClass;
-		this.activeCurrency = activeCurrency;
-		
-		setLocaleDecimalSeparator();
-   		
-		m_bCorpAction = bCorpAction;
-	}
+
 	
 	public String getAction() {
 		return m_action;
@@ -140,6 +120,7 @@ public class Trade implements Comparable<Trade>{
 	}
 	public Trade() {
 		m_bCorpAction = false;
+		m_bCancel = false;
 		setLocaleDecimalSeparator(); 
 	}
 	public void setbBuySell(boolean bBuySell) {
@@ -251,5 +232,14 @@ public class Trade implements Comparable<Trade>{
 	
 	public String getLocaleNubmer(float num) {
 		return m_df.format(num);
+	}
+
+	public void setCancel(boolean bCancel) {
+		m_bCancel = bCancel;
+		
+	}
+
+	public boolean isCancel() {
+		return m_bCancel;
 	}
 }
