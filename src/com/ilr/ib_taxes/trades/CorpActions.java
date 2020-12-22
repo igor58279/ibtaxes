@@ -76,7 +76,7 @@ public class CorpActions {
 					}
 					else {
 						//not in period
-						System.out.println( "Another cash period:" + corpAction.toString());
+						System.out.println( "Another corporate action period:" + corpAction.toString());
 					}
 			}
 			bwAction.close();
