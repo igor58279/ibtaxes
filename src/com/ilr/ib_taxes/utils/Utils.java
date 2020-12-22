@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.ilr.ib_taxes.payments.CashTransaction;
+import com.ilr.ib_taxes.trades.CorpAction;
 import com.ilr.ib_taxes.trades.Trade;
 
 public class Utils {
@@ -36,6 +37,14 @@ public class Utils {
 	private static final int CASH_AMOUNT = 26;
 	private static final int CASH_TRANSTYPE = 27;
 	private static final int CASH_DATE = 31;
+	
+	private static final int CORP_TICKER_NAME = 6;
+	private static final int CORP_ACTION_DESCRIPTION = 7;
+	private static final int CORP_ACTION_QUANTITY = 30;
+	private static final int CORP_ACTION_VALUE = 27;
+	private static final int CORP_ACTION_CURRENCY = 3;
+	private static final int CORP_ACTION_ACTIVE_CLASS = 5;
+	private static final int CORP_ACTION_DATE = 24;
 	
 	
 	
@@ -82,7 +91,7 @@ public class Utils {
 	private String replaceAdditionalCommas(String line) {
 		
 		
-		
+		boolean bWarning = false;
 		char[] myChars = line.toCharArray();
 		
 		int count = 0;
@@ -92,7 +101,10 @@ public class Utils {
 			}
 			else if(myChars[i] == ',' && (count%2 !=0 )) {
 				//comma inside quotes - replace it, otherwise - ignore
-				System.out.println("Line with comma in quotes " + line);
+				if(!bWarning) {
+					System.out.println("Line with comma in quotes " + line);
+					bWarning = true;
+				}
 				myChars[i] = ' ';
 			}
 		}
@@ -167,6 +179,34 @@ public class Utils {
 		return cash;
 	}
 	
+	public CorpAction getCorpActionFromLine(int i,String[] line) {
+		CorpAction action = new CorpAction();
+		
+		try {
+			action.setTicketName(stripQuotes(line[CORP_TICKER_NAME]));
+			
+			
+			action.setActionDescription(stripQuotes(line[CORP_ACTION_DESCRIPTION]));
+			
+			
+			action.setQuantity(Float.parseFloat(stripQuotes(line[CORP_ACTION_QUANTITY])));
+			
+			action.setValue(Float.parseFloat(stripQuotes(line[CORP_ACTION_VALUE])));
+			
+			action.setCurrency(stripQuotes(line[CORP_ACTION_CURRENCY]));
+			action.setAssetClass(stripQuotes(line[CORP_ACTION_ACTIVE_CLASS]));
+			
+			
+			Date actionDate=formatter.parse(stripQuotes(line[CORP_ACTION_DATE]));
+			action.setActionDate(actionDate);
+			
+		}
+		catch (Exception e){
+			System.out.println("Bad line : " + i + " "+ e.getMessage());
+			return null;
+		}
+		return action;
+	}	
 	
 	public CurrencyRate getCurrencyRateFromLine(int i,String[] line) {
 		CurrencyRate curRate = null;
@@ -188,7 +228,6 @@ public class Utils {
 	
 	
 	public String stripQuotes(String s) throws Exception {
-		
 		
 		if(s.startsWith("\"") && s.endsWith("\"")) {
 			if(s.length()<=2) {

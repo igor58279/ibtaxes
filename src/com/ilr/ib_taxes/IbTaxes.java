@@ -8,6 +8,8 @@ import java.util.Properties;
 
 import com.ilr.ib_taxes.payments.CashTransaction;
 import com.ilr.ib_taxes.payments.CashTransactions;
+import com.ilr.ib_taxes.trades.CorpAction;
+import com.ilr.ib_taxes.trades.CorpActions;
 import com.ilr.ib_taxes.trades.Trade;
 import com.ilr.ib_taxes.trades.Trades;
 import com.ilr.ib_taxes.utils.CurrencyRate;
@@ -43,14 +45,40 @@ public class IbTaxes {
 		String statements_dir = appProps.getProperty("statements_dir");
 		
 		String currency_files = appProps.getProperty("exchange_files");
-		String[] exchange_rates_files  = currency_files.split(splitter);
+		String[] exchange_rates_files = null;
+		if(currency_files != null )
+			exchange_rates_files  = currency_files.split(splitter);
+		else {
+			System.out.println( "Error: exchange_files is not set " );
+			return;
+		}
 		
 		
 		String cash_files = appProps.getProperty("cash_files");
-		String[] cash_activity_files  = cash_files.split(splitter);
+		String[] cash_activity_files = null;
+		
+		if(cash_files != null)
+			cash_activity_files = cash_files.split(splitter);
+		else {
+			System.out.println( "Error: cash_files is not set " );
+		}
 		
 		String statements_files = appProps.getProperty("statements_files");
-		String[] ib_statements_files  = statements_files.split(splitter);
+		String[] ib_statements_files = null;
+		
+		if(statements_files != null)
+			ib_statements_files = statements_files.split(splitter);
+		else
+			System.out.println( "Error: statements_files is not set " );
+			
+		
+		String corp_files = appProps.getProperty("corporates_files");
+		String[] ib_corp_files = null;
+		
+		if(corp_files != null)
+			ib_corp_files = corp_files.split(splitter);
+		else
+			System.out.println( "Error: corporates_files is not set " );
 		
 		
 		PersonalData persData = new PersonalData(appProps);
@@ -76,9 +104,38 @@ public class IbTaxes {
 		
 		
 		splitter=",";
+		
+		CorpActions  corpActions = new CorpActions(persData.getHeaderLines(),persData.getStart(),persData.getEnd());
+		for(int files = 0;ib_corp_files != null && files < ib_corp_files.length; files++) {
+			System.out.println( "Processing " + statements_dir + ib_corp_files[files]);
+			List<String[]> csvData = utils.getCsv(statements_dir + ib_corp_files[files],splitter);
+			
+			
+			//skip header line
+			for (int i = 1; i < csvData.size();i++ ) {
+				String[] line = csvData.get(i);
+
+				CorpAction  action = utils.getCorpActionFromLine(i,line);
+				if(action != null) {
+					corpActions.AddAction(action);
+				}
+				else {
+					String field;
+					for(int j=0; j<line.length; j++) {
+						field = utils.stripQuotes(line[j]);
+						if(field != null)
+							System.out.print(field  +" ");
+						else
+							System.out.print("empty" + j +" ");
+					}
+					System.out.println( "\n");
+				}
+			}		
+		}
+		
 		Float exRate;
 		Trades trades = new Trades(persData.getHeaderLines(),persData.getStart(),persData.getEnd());
-		for(int files = 0;files < ib_statements_files.length; files++) {
+		for(int files = 0;ib_statements_files != null && files < ib_statements_files.length; files++) {
 			List<String[]> csvData = utils.getCsv(statements_dir + ib_statements_files[files],splitter);
 			System.out.println( "Processing " + statements_dir + ib_statements_files[files]);
 			
@@ -110,7 +167,7 @@ public class IbTaxes {
 		
 		CashTransactions cashTransactions = new CashTransactions(persData.getHeaderLines(),persData.getStart(),persData.getEnd());
 		
-		for(int files = 0;files < cash_activity_files.length; files++) {
+		for(int files = 0;cash_activity_files != null && files < cash_activity_files.length; files++) {
 			List<String[]> csvData = utils.getCsv(statements_dir + cash_activity_files[files],splitter);
 			System.out.println( "Processing " + statements_dir + cash_activity_files[files]);
 
@@ -140,6 +197,10 @@ public class IbTaxes {
 		}
 		//trades.printMap();	
 		//trades.printTickerTaxes("/Users/igor/Brokerage/IB/taxes_test.csv","FANG") ;
+		
+		//generate files with all corporate actions
+		corpActions.printAllCorpActions(statements_dir +  "corp_actions.csv");
+
 		
 		//generate file with taxes for trades
 		trades.printAllTaxes(statements_dir + "taxes.csv");

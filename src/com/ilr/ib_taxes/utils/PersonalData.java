@@ -46,6 +46,7 @@ public class PersonalData {
 				HEADER_LINES[1] = String.format(HEADER_LINES[1], m_period_start,m_period_end);
 				HEADER_LINES[3] = String.format(HEADER_LINES[3], m_last_name_rus,m_first_name_rus,m_middle_name_rus);
 				HEADER_LINES[4] = String.format(HEADER_LINES[4], m_last_name,m_first_name);
+				HEADER_LINES[5] = String.format(HEADER_LINES[5], m_account);
 				
 				SimpleDateFormat formatter = new SimpleDateFormat(DATE) ;
 				
