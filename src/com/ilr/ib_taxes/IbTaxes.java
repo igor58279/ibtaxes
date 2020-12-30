@@ -217,7 +217,7 @@ public class IbTaxes {
 
 		
 		//generate file with taxes for trades
-		trades.printAllTaxes(statements_dir + "taxes.csv");
+		trades.printAllTaxes(statements_dir + "taxes_stocks.csv",statements_dir + "taxes_options.csv");
 		
 		//open positions for verification purposes
 		trades.printActive(statements_dir +  "open.csv");

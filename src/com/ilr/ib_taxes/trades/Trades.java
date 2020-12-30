@@ -75,20 +75,34 @@ public class Trades {
 	
 	//calculates all and prints into the file all tax line
 	//reduces all closed positions from m_activeTrades
-	public void printAllTaxes(String fileName) {	
-		try (FileWriter writer = new FileWriter(fileName);
-			BufferedWriter bw = new BufferedWriter(writer)) {
-			printHeader(bw);
+	public void printAllTaxes(String fileStocks,String fileOptions) {	
+		try {
+		    FileWriter writerStocks = new FileWriter(fileStocks);
+			BufferedWriter bwStocks = new BufferedWriter(writerStocks);
+		    FileWriter writerOptions = new FileWriter(fileOptions);
+			BufferedWriter bwOptions = new BufferedWriter(writerOptions);
+			
+			
+			printHeader(bwStocks);
+			printHeader(bwOptions);
 			
 			ArrayList<String> taxStrList;
 			for (Map.Entry<String, List<Trade>> set : activeTrades.entrySet()) {
 				taxStrList = getTaxLines(set.getKey());
 				if(taxStrList != null) {
 					for(int i =0; i<taxStrList.size();i++) {
-						bw.write(taxStrList.get(i));
+						
+						//separate stocks and options reports
+						if(set.getKey().length() >  5) 
+							bwOptions.write(taxStrList.get(i));
+						else
+							bwStocks.write(taxStrList.get(i));
 				    }
 				}
 			}	
+			bwStocks.close();
+			bwOptions.close();
+			
 		}catch (IOException e) {
 	        System.err.format("IOException: %s%n", e);
 	    }
