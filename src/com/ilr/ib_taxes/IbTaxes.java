@@ -123,6 +123,7 @@ public class IbTaxes {
 					action.setExchRate(exRate);
 
 					corpActions.AddAction(action);
+					System.out.println( action);
 				}
 				else {
 					String field;

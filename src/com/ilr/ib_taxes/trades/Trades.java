@@ -21,6 +21,10 @@ public class Trades {
 	private Date m_start,m_end;
 	
 	Map<String,List<Trade>> activeTrades;
+	Map<String,List<CorpAction>> m_AddStocks;
+	Map<String,List<CorpAction>> m_RemoveStocks;
+	
+	
 	
 	public Trades(String[] headerLines, Date start, Date end) {
 		
@@ -28,6 +32,9 @@ public class Trades {
 		m_start = start;
 		m_end = end;
 		activeTrades = new HashMap<String,List<Trade>>();
+		
+		m_AddStocks = new HashMap<String,List<CorpAction>>();
+		m_RemoveStocks = new HashMap<String,List<CorpAction>>();
 	}
 	
 	public boolean AddTrade(Trade trade) {
@@ -43,6 +50,22 @@ public class Trades {
 		};
 		
 		lstTrade.add(trade);
+		return true;
+	}
+	
+public boolean AddCorporateActionEvent(Map<String,List<CorpAction>> action_map, CorpAction action) {
+		
+		String key = action.getTicketName();
+		
+		List<CorpAction> lstAction  = action_map.get(key);
+		
+		if(lstAction == null) {
+			
+			lstAction = new ArrayList<CorpAction>();
+			action_map.put(key,lstAction);
+		};
+		
+		lstAction.add(action);
 		return true;
 	}
 	
@@ -88,18 +111,32 @@ public class Trades {
 			
 			ArrayList<String> taxStrList;
 			for (Map.Entry<String, List<Trade>> set : activeTrades.entrySet()) {
-				taxStrList = getTaxLines(set.getKey());
-				if(taxStrList != null) {
-					for(int i =0; i<taxStrList.size();i++) {
-						
-						//separate stocks and options reports
-						if(set.getKey().length() >  5) 
-							bwOptions.write(taxStrList.get(i));
-						else
-							bwStocks.write(taxStrList.get(i));
-				    }
-				}
+				
+//				if(HasCorporateAction(set.getKey()) == false){
+//					// Don't consolidate actions with merge
+					taxStrList = getTaxLines(set.getKey());
+					if(taxStrList != null) {
+						for(int i =0; i<taxStrList.size();i++) {
+							
+							//separate stocks and options reports
+							if(set.getKey().length() >  5) 
+								bwOptions.write(taxStrList.get(i));
+							else
+								bwStocks.write(taxStrList.get(i));
+					    }
+					}
+//				}
+//				else {
+//					//We have add stocks
+//					// so we have also remove
+//					processCorporateAction
+//					
+//					
+//				}
 			}	
+			
+			
+			
 			bwStocks.close();
 			bwOptions.close();
 			
@@ -179,9 +216,10 @@ public class Trades {
 			List<Trade> lstTrade = activeTrades.get(key);
 			
 			if(lstTrade == null) {
-				//We should have this ticket before - at least print warning
-				System.out.format("Unknown ticket %s\n",key );
-				return false;
+				//it's possible to receive stocks of not traded before ticket
+				//for merged case (but not for dividend)
+				lstTrade = new ArrayList<Trade>();
+				
 			};
 			String description = action.getActionDescription();
 			
@@ -198,12 +236,23 @@ public class Trades {
 			}
 			else if (description.contains("MERGED")) {
 				System.out.format("MERGED event %s\n",description );
+				if(action.getQuantity() > 0) {
+					//Add stock action
+					AddCorporateActionEvent(m_AddStocks,action);
+				}
+				else {
+					//remove stock action
+					AddCorporateActionEvent(m_RemoveStocks,action);
+				}
 			}
 			else {
 				System.out.format("Unknown event %s\n",description );
 			}
 			
 			return true;
+	}
+	public boolean HasCorporateAction(String key) {
+	   return 	m_AddStocks.containsKey(key);
 	}
 
 	public void removeCanceledTrade(String ticketName, Trade trade) {

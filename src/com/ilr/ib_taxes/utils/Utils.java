@@ -102,7 +102,7 @@ public class Utils {
 			else if(myChars[i] == ',' && (count%2 !=0 )) {
 				//comma inside quotes - replace it, otherwise - ignore
 				if(!bWarning) {
-					System.out.println("Line with comma in quotes " + line);
+					//System.out.println("Line with comma in quotes " + line);
 					bWarning = true;
 				}
 				myChars[i] = ' ';
@@ -201,7 +201,9 @@ public class Utils {
 			action.setTicketName(stripQuotes(line[CORP_TICKER_NAME]));
 			
 			
-			action.setActionDescription(stripQuotes(line[CORP_ACTION_DESCRIPTION]));
+			String actionDesc = stripQuotes(line[CORP_ACTION_DESCRIPTION]);
+			action.setActionDescription(actionDesc);
+			
 			
 			
 			action.setQuantity(Float.parseFloat(stripQuotes(line[CORP_ACTION_QUANTITY])));
@@ -214,6 +216,10 @@ public class Utils {
 			
 			Date actionDate=formatter.parse(stripQuotes(line[CORP_ACTION_DATE]));
 			action.setActionDate(actionDate);
+			
+			String[] descLine = actionDesc.split("\\(",2);
+			String mergedTicket = descLine[0].trim();
+			action.setMergedTicket(mergedTicket);
 			
 		}
 		catch (Exception e){

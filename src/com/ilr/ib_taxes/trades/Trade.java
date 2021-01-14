@@ -34,6 +34,7 @@ public class Trade implements Comparable<Trade>{
 	private float  fCommission;
 	private Date dealDate;
 	private Date settleDate;
+	private Date corpDate;
 	private String activeClass;
 	private String activeCurrency;
 	private String m_action;

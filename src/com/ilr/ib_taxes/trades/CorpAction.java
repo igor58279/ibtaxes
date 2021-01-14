@@ -18,6 +18,9 @@ public class CorpAction implements Comparable<CorpAction> {
 	private static final String DATE_FORMAT = "dd/MM/yyyy";
 	private String m_assetClass;
 	private String m_ticketName;
+	
+	private String m_mergedName;
+	
 	private String m_actionDescription;
 	private String m_currency;
 	
@@ -112,7 +115,7 @@ public class CorpAction implements Comparable<CorpAction> {
 	public String toString() {
 		return "CorpAction [m_assetClass=" + m_assetClass + ", m_ticketName=" + m_ticketName + ", m_actionDescription="
 				+ m_actionDescription + ", m_currency=" + m_currency + ", m_quantity=" + m_quantity + ", m_value="
-				+ m_value + ", m_ActionDate=" + m_ActionDate + "]";
+				+ m_value + ", m_ActionDate=" + m_ActionDate +  ", m_mergedName=" + m_mergedName + "]";
 	}
 
 	public void setAssetClass(String assetClass) {
@@ -121,5 +124,13 @@ public class CorpAction implements Comparable<CorpAction> {
 	}
 	public String getAssetClass() {
 		return m_assetClass;
+	}
+
+	public void setMergedTicket(String mergedTicket) {
+		m_mergedName = mergedTicket;
+		
+	}
+	public String getMergedTicke() {
+		return m_mergedName;
 	}
 }
